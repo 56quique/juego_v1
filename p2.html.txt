@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Pantalla 2</title>
+
+  <link rel="stylesheet" href="css/base.css">
+  <!-- Usa el mismo estilo que la pantalla 1 -->
+</head>
+
+<body>
+
+  <div class="pantalla">
+
+    <div>
+
+      <div class="titulo">
+        Pantalla 2
+      </div>
+
+      <div class="contenido">
+        <!-- Más adelante: identidad, preguntas, etc -->
+      </div>
+
+    </div>
+
+    <div class="acciones">
+
+      <a href="index.html" class="boton secundario">
+        Volver
+      </a>
+      <!-- Botón para regresar -->
+
+      <a href="p3.html" class="boton">
+        Seguir
+      </a>
+      <!-- Botón para avanzar (cuando exista p3.html) -->
+
+    </div>
+
+  </div>
+
+</body>
+</html>

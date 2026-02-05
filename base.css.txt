@@ -1,0 +1,65 @@
+/* Esto se aplica a todos los elementos */
+* {
+  box-sizing: border-box;   /* Facilita tamaños */
+  font-family: Arial, sans-serif;
+}
+
+/* Estilo general del cuerpo */
+body {
+  margin: 0;                /* Saca márgenes */
+  background: #f4f6f8;      /* Fondo claro */
+  color: #222;              /* Color del texto */
+  height: 100vh;            /* Alto de la pantalla */
+  display: flex;            /* Centrado */
+  align-items: center;
+  justify-content: center;
+}
+
+/* Caja principal */
+.pantalla {
+  background: white;        /* Fondo blanco */
+  width: 90%;
+  max-width: 700px;
+  min-height: 60vh;
+  padding: 40px;
+  border-radius: 16px;      /* Bordes redondeados */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Título */
+.titulo {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+/* Zona de texto */
+.contenido {
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+/* Zona de botones */
+.acciones {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+/* Botón principal */
+.boton {
+  padding: 12px 20px;
+  background: #4a90e2;
+  color: white;
+  text-decoration: none;   /* Saca subrayado */
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+/* Botón secundario */
+.boton.secundario {
+  background: #cccccc;
+  color: #222;
+}
