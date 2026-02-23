@@ -1,64 +1,26 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prueba Foro Mujeres de Acción</title>
-
-<style>
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background: #f4f4f4;
-  text-align: center;
-}
-
-header {
-  background: #7b3fa0;
-  color: white;
-  padding: 20px;
-}
-
-.contenedor {
-  max-width: 900px;
-  margin: 40px auto;
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
-}
-</style>
-
+    <meta charset="UTF-8">
+    <title>Juego de Avance</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<header>
-  <h1>Prueba Foro - Mujeres de Acción</h1>
-</header>
+    <h1>Juego de Obstáculos</h1>
 
-<div class="contenedor">
-  <h2>Espacio de Comunidad</h2>
-  <p>Esta es una prueba del sistema de comentarios.</p>
+    <div class="game-container">
+        <div id="player"></div>
+    </div>
 
-  <div id="disqus_thread"></div>
-</div>
+    <div class="controls">
+        <button onclick="moveBack()">⬅ Atrás</button>
+        <button onclick="jump()">⬆ Saltar</button>
+        <button onclick="moveForward()">Adelante ➡</button>
+    </div>
 
-<script>
-var disqus_config = function () {
-  this.page.url = window.location.href;
-  this.page.identifier = "foro-prueba-general";
-};
+    <p id="message"></p>
 
-(function() {
-  var d = document, s = d.createElement('script');
-  s.src = 'https://mujeres-de-accion.disqus.com/embed.js';
-  s.setAttribute('data-timestamp', +new Date());
-  (d.head || d.body).appendChild(s);
-})();
-</script>
-
-<noscript>Activa JavaScript para ver los comentarios.</noscript>
-
+    <script src="script.js"></script>
 </body>
 </html>
