@@ -2,51 +2,79 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     text-align: center;
-    background-color: #111;
-    color: white;
+    background: linear-gradient(#5c94fc 70%, #d8a45d 70%);
+    overflow-x: hidden;
 }
 
 h1 {
-    margin-top: 15px;
+    color: white;
+    text-shadow: 2px 2px black;
 }
 
 .game-container {
     width: 95%;
-    max-width: 800px;
-    height: 180px;
+    max-width: 900px;
+    height: 220px;
     margin: 20px auto;
-    background-color: #333;
     position: relative;
     overflow: hidden;
-    border: 3px solid white;
+    border-bottom: 8px solid #8b4513;
 }
 
+/* PERSONAJE */
 #player {
-    width: 50px;
-    height: 50px;
-    background-color: lime;
+    width: 40px;
+    height: 60px;
     position: absolute;
     bottom: 0;
     left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: bold;
-    color: black;
-    transition: left 0.15s, bottom 0.2s;
 }
 
+/* cuerpo */
+#player::before {
+    content: "";
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: red;
+    bottom: 0;
+    border-radius: 5px;
+}
+
+/* cabeza */
+#player::after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: #ffcc99;
+    top: 0;
+    left: 5px;
+    border-radius: 50%;
+}
+
+.name {
+    position: absolute;
+    top: -20px;
+    width: 100%;
+    font-size: 12px;
+    color: white;
+    text-shadow: 1px 1px black;
+}
+
+/* OBSTÁCULOS */
 .obstacle {
     width: 50px;
     height: 50px;
-    background-color: red;
+    background: #b5651d;
     position: absolute;
     bottom: 0;
+    border: 3px solid #8b4513;
 }
 
+/* BOTONES */
 .controls {
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 .controls button {
@@ -54,20 +82,25 @@ h1 {
     margin: 5px;
     font-size: 22px;
     border: none;
-    border-radius: 8px;
-    cursor: pointer;
+    border-radius: 10px;
+    background: #222;
+    color: white;
+}
+
+.controls button:active {
+    transform: scale(0.95);
 }
 
 #message {
-    margin-top: 10px;
     font-size: 18px;
     font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px black;
 }
 
-/* Botones más grandes en móvil */
+/* Responsive */
 @media (max-width: 600px) {
     .controls button {
         width: 30%;
-        font-size: 24px;
     }
 }
