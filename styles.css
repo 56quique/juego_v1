@@ -1,0 +1,41 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #222;
+    color: white;
+}
+
+.game-container {
+    width: 800px;
+    height: 200px;
+    margin: 20px auto;
+    background-color: #444;
+    position: relative;
+    overflow: hidden;
+    border: 3px solid white;
+}
+
+#player {
+    width: 40px;
+    height: 40px;
+    background-color: lime;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transition: left 0.2s, bottom 0.2s;
+}
+
+.obstacle {
+    width: 40px;
+    height: 40px;
+    background-color: red;
+    position: absolute;
+    bottom: 0;
+}
+
+.controls button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
