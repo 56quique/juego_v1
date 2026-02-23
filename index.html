@@ -2,21 +2,24 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Juego de Avance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Mique</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <h1>Juego de Obstáculos</h1>
+    <h1>🏃 Juego de Mique</h1>
 
     <div class="game-container">
-        <div id="player"></div>
+        <div id="player">
+            <span class="name">Mique</span>
+        </div>
     </div>
 
     <div class="controls">
-        <button onclick="moveBack()">⬅ Atrás</button>
-        <button onclick="jump()">⬆ Saltar</button>
-        <button onclick="moveForward()">Adelante ➡</button>
+        <button id="backBtn">⬅</button>
+        <button id="jumpBtn">⬆</button>
+        <button id="forwardBtn">➡</button>
     </div>
 
     <p id="message"></p>
