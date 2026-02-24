@@ -11,11 +11,17 @@ h1 {
     text-shadow: 2px 2px black;
 }
 
+.scoreboard {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
 .game {
     position: relative;
     width: 100%;
     max-width: 900px;
-    height: 300px;
+    height: 320px;
     margin: auto;
     overflow: hidden;
     background: linear-gradient(#5c94fc 70%, #d8a45d 70%);
@@ -25,8 +31,8 @@ h1 {
 /* NUBES */
 .cloud {
     position: absolute;
-    width: 80px;
-    height: 40px;
+    width: 90px;
+    height: 45px;
     background: white;
     border-radius: 50px;
 }
@@ -40,43 +46,97 @@ h1 {
 }
 
 .cloud::before {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     top: -20px;
-    left: 10px;
+    left: 15px;
 }
 
 .cloud::after {
-    width: 50px;
-    height: 50px;
-    top: -25px;
-    right: 10px;
+    width: 60px;
+    height: 60px;
+    top: -30px;
+    right: 15px;
 }
 
 .cloud1 {
-    top: 40px;
+    top: 50px;
     animation: moveCloud 30s linear infinite;
 }
 
 .cloud2 {
-    top: 90px;
+    top: 120px;
     animation: moveCloud 45s linear infinite;
 }
 
 @keyframes moveCloud {
     from { left: 100%; }
-    to { left: -100px; }
+    to { left: -150px; }
 }
 
-/* JUGADOR */
+/* PERSONAJE */
 #player {
-    width: 40px;
-    height: 60px;
-    background: red;
     position: absolute;
     bottom: 60px;
-    left: 50px;
+    left: 80px;
+    width: 40px;
+    height: 70px;
+}
+
+/* Gorra */
+.hat {
+    width: 40px;
+    height: 15px;
+    background: red;
+    position: absolute;
+    top: 0;
+    border-radius: 5px 5px 0 0;
+}
+
+/* Cara */
+.face {
+    width: 30px;
+    height: 25px;
+    background: #ffcc99;
+    position: absolute;
+    top: 15px;
+    left: 5px;
+    border-radius: 50%;
+}
+
+/* Cuerpo */
+.body {
+    width: 35px;
+    height: 25px;
+    background: blue;
+    position: absolute;
+    bottom: 20px;
+    left: 2px;
     border-radius: 5px;
+}
+
+/* Piernas */
+.leg {
+    width: 8px;
+    height: 20px;
+    background: brown;
+    position: absolute;
+    bottom: 0;
+}
+
+.leg1 {
+    left: 5px;
+    animation: runLegs 0.3s infinite alternate;
+}
+
+.leg2 {
+    right: 5px;
+    animation: runLegs 0.3s infinite alternate-reverse;
+}
+
+@keyframes runLegs {
+    from { height: 20px; }
+    to { height: 10px; }
 }
 
 /* SUELO */
@@ -111,5 +171,6 @@ button {
 
 #message {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 20px;
+    color: white;
 }
