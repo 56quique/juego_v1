@@ -15,12 +15,19 @@ let highScore = localStorage.getItem("miqueHighScore") || 0;
 
 highScoreDisplay.innerText = highScore;
 
+function addScore(points) {
+    score += points;
+    scoreDisplay.innerText = score;
+}
+
 function createObstacle() {
     if (gameOver) return;
 
     const obstacle = document.createElement("div");
     obstacle.classList.add("obstacle");
     obstacle.style.left = game.offsetWidth + "px";
+    obstacle.dataset.passed = "false";
+
     game.appendChild(obstacle);
     obstacles.push(obstacle);
 
@@ -44,14 +51,12 @@ function gameLoop() {
 
     player.style.bottom = playerBottom + "px";
 
-    score++;
-    scoreDisplay.innerText = score;
-
     obstacles.forEach((obstacle, index) => {
         let obstacleLeft = parseFloat(obstacle.style.left);
         obstacleLeft -= 6;
         obstacle.style.left = obstacleLeft + "px";
 
+        // Si el obstáculo sale de pantalla
         if (obstacleLeft < -40) {
             obstacle.remove();
             obstacles.splice(index, 1);
@@ -60,12 +65,22 @@ function gameLoop() {
         let playerRect = player.getBoundingClientRect();
         let obstacleRect = obstacle.getBoundingClientRect();
 
+        // COLISIÓN
         if (
             playerRect.right > obstacleRect.left &&
             playerRect.left < obstacleRect.right &&
             playerRect.bottom > obstacleRect.top
         ) {
             endGame();
+        }
+
+        // SUMAR PUNTOS AL SUPERAR OBSTÁCULO
+        if (
+            obstacleRect.right < playerRect.left &&
+            obstacle.dataset.passed === "false"
+        ) {
+            obstacle.dataset.passed = "true";
+            addScore(10);
         }
     });
 
@@ -76,6 +91,9 @@ function jump() {
     if (!isJumping && !gameOver) {
         velocityY = -15;
         isJumping = true;
+
+        // SUMAR PUNTOS POR SALTO
+        addScore(2);
     }
 }
 
