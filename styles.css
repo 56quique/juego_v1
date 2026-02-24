@@ -174,3 +174,19 @@ button {
     font-size: 20px;
     color: white;
 }
+/* MONEDA */
+.coin {
+    width: 25px;
+    height: 25px;
+    background: gold;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 120px;
+    box-shadow: 0 0 10px yellow;
+    animation: spin 0.6s infinite alternate;
+}
+
+@keyframes spin {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(0.3); }
+}
