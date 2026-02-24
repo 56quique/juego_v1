@@ -9,16 +9,20 @@ let velocityY = 0;
 let gravity = 0.8;
 let isJumping = false;
 let gameOver = false;
+
 let obstacles = [];
+let coins = [];
+
 let score = 0;
 let highScore = localStorage.getItem("miqueHighScore") || 0;
-
 highScoreDisplay.innerText = highScore;
 
 function addScore(points) {
     score += points;
     scoreDisplay.innerText = score;
 }
+
+/* -------- OBSTÁCULOS -------- */
 
 function createObstacle() {
     if (gameOver) return;
@@ -36,6 +40,29 @@ function createObstacle() {
 
 createObstacle();
 
+/* -------- MONEDAS -------- */
+
+function createCoin() {
+    if (gameOver) return;
+
+    const coin = document.createElement("div");
+    coin.classList.add("coin");
+    coin.style.left = game.offsetWidth + "px";
+
+    // Altura aleatoria
+    let randomHeight = 100 + Math.random() * 80;
+    coin.style.bottom = randomHeight + "px";
+
+    game.appendChild(coin);
+    coins.push(coin);
+
+    setTimeout(createCoin, 2000 + Math.random() * 3000);
+}
+
+createCoin();
+
+/* -------- GAME LOOP -------- */
+
 function gameLoop() {
     if (gameOver) return;
 
@@ -51,21 +78,22 @@ function gameLoop() {
 
     player.style.bottom = playerBottom + "px";
 
+    let playerRect = player.getBoundingClientRect();
+
+    /* ---- Obstáculos ---- */
     obstacles.forEach((obstacle, index) => {
         let obstacleLeft = parseFloat(obstacle.style.left);
         obstacleLeft -= 6;
         obstacle.style.left = obstacleLeft + "px";
 
-        // Si el obstáculo sale de pantalla
         if (obstacleLeft < -40) {
             obstacle.remove();
             obstacles.splice(index, 1);
         }
 
-        let playerRect = player.getBoundingClientRect();
         let obstacleRect = obstacle.getBoundingClientRect();
 
-        // COLISIÓN
+        // Colisión
         if (
             playerRect.right > obstacleRect.left &&
             playerRect.left < obstacleRect.right &&
@@ -74,7 +102,7 @@ function gameLoop() {
             endGame();
         }
 
-        // SUMAR PUNTOS AL SUPERAR OBSTÁCULO
+        // Punto por superar obstáculo
         if (
             obstacleRect.right < playerRect.left &&
             obstacle.dataset.passed === "false"
@@ -84,18 +112,46 @@ function gameLoop() {
         }
     });
 
+    /* ---- Monedas ---- */
+    coins.forEach((coin, index) => {
+        let coinLeft = parseFloat(coin.style.left);
+        coinLeft -= 6;
+        coin.style.left = coinLeft + "px";
+
+        if (coinLeft < -30) {
+            coin.remove();
+            coins.splice(index, 1);
+        }
+
+        let coinRect = coin.getBoundingClientRect();
+
+        // Colisión con moneda
+        if (
+            playerRect.right > coinRect.left &&
+            playerRect.left < coinRect.right &&
+            playerRect.bottom > coinRect.top &&
+            playerRect.top < coinRect.bottom
+        ) {
+            addScore(25);
+            coin.remove();
+            coins.splice(index, 1);
+        }
+    });
+
     requestAnimationFrame(gameLoop);
 }
+
+/* -------- SALTO -------- */
 
 function jump() {
     if (!isJumping && !gameOver) {
         velocityY = -15;
         isJumping = true;
-
-        // SUMAR PUNTOS POR SALTO
         addScore(2);
     }
 }
+
+/* -------- GAME OVER -------- */
 
 function endGame() {
     gameOver = true;
