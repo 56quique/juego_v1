@@ -1,3 +1,4 @@
+let gameSpeed = 4;
 const player = document.getElementById("player");
 const game = document.querySelector(".game");
 const message = document.getElementById("message");
@@ -83,7 +84,7 @@ function gameLoop() {
     /* ---- Obstáculos ---- */
     obstacles.forEach((obstacle, index) => {
         let obstacleLeft = parseFloat(obstacle.style.left);
-        obstacleLeft -= 6;
+        obstacleLeft -= gameSpeed;
         obstacle.style.left = obstacleLeft + "px";
 
         if (obstacleLeft < -40) {
@@ -115,7 +116,7 @@ function gameLoop() {
     /* ---- Monedas ---- */
     coins.forEach((coin, index) => {
         let coinLeft = parseFloat(coin.style.left);
-        coinLeft -= 6;
+        coinLeft -= gameSpeed;
         coin.style.left = coinLeft + "px";
 
         if (coinLeft < -30) {
