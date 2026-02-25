@@ -3,35 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mique Run</title>
+<title>Mique World</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<h1>🌟 Mique Run</h1>
+<h1>🌍 Mique World</h1>
 
-<div class="scoreboard">
-    Puntaje: <span id="score">0</span> |
-    Récord: <span id="highScore">0</span>
+<div class="hud">
+  Puntaje: <span id="score">0</span>
 </div>
 
 <div class="game">
-    <div class="cloud cloud1"></div>
-    <div class="cloud cloud2"></div>
-
+  <div class="world" id="world">
     <div id="player">
-        <div class="hat"></div>
-        <div class="face"></div>
-        <div class="body"></div>
-        <div class="leg leg1"></div>
-        <div class="leg leg2"></div>
+      <div class="hat"></div>
+      <div class="face"></div>
+      <div class="body"></div>
+      <div class="leg leg1"></div>
+      <div class="leg leg2"></div>
     </div>
-
-    <div class="ground"></div>
+  </div>
 </div>
 
 <div class="controls">
-    <button id="jumpBtn">⬆ SALTAR</button>
+  <button id="leftBtn">⬅</button>
+  <button id="jumpBtn">⬆</button>
+  <button id="rightBtn">➡</button>
 </div>
 
 <p id="message"></p>
