@@ -1,137 +1,107 @@
-const world = document.getElementById("world");
 const player = document.getElementById("player");
+const world = document.getElementById("world");
+const scoreDisplay = document.getElementById("score");
+
 const leftBtn = document.getElementById("leftBtn");
 const rightBtn = document.getElementById("rightBtn");
 const jumpBtn = document.getElementById("jumpBtn");
-const scoreDisplay = document.getElementById("score");
-const message = document.getElementById("message");
 
 let playerX = 100;
-let playerY = 200;
+let playerY = 0;
 let velocityY = 0;
 let gravity = 0.8;
-let jumpPower = -15;
-let speed = 5;
+let jumpPower = 15;
+let playerSpeed = 5;
+let onGround = false;
 
 let movingLeft = false;
 let movingRight = false;
-let onGround = false;
 
 let score = 0;
 
-let platforms = [];
+// Controles táctiles
+leftBtn.addEventListener("touchstart", () => movingLeft = true);
+leftBtn.addEventListener("touchend", () => movingLeft = false);
 
-/* Crear plataformas */
-function createPlatform(x, y, width){
-  const platform = document.createElement("div");
-  platform.classList.add("platform");
-  platform.style.left = x + "px";
-  platform.style.bottom = y + "px";
-  platform.style.width = width + "px";
-  world.appendChild(platform);
-  platforms.push(platform);
-}
+rightBtn.addEventListener("touchstart", () => movingRight = true);
+rightBtn.addEventListener("touchend", () => movingRight = false);
 
-/* Nivel */
-createPlatform(0, 50, 400);
-createPlatform(500, 120, 200);
-createPlatform(800, 200, 200);
-createPlatform(1100, 80, 300);
-createPlatform(1600, 150, 250);
-createPlatform(2000, 60, 400);
-createPlatform(2500, 180, 300);
-
-/* Movimiento */
-function jump(){
-  if(onGround){
-    velocityY = jumpPower;
-    onGround = false;
-  }
-}
-
-leftBtn.addEventListener("mousedown", ()=> movingLeft=true);
-rightBtn.addEventListener("mousedown", ()=> movingRight=true);
-leftBtn.addEventListener("mouseup", ()=> movingLeft=false);
-rightBtn.addEventListener("mouseup", ()=> movingRight=false);
-
-jumpBtn.addEventListener("click", jump);
-
-document.addEventListener("keydown", (e)=>{
-  if(e.code==="ArrowLeft") movingLeft=true;
-  if(e.code==="ArrowRight") movingRight=true;
-  if(e.code==="Space") jump();
-});
-
-document.addEventListener("keyup", (e)=>{
-  if(e.code==="ArrowLeft") movingLeft=false;
-  if(e.code==="ArrowRight") movingRight=false;
-});
-
-/* Game loop */
-function gameLoop(){
-
-  // Movimiento horizontal
-  if(movingLeft) playerX -= speed;
-  if(movingRight) playerX += speed;
-
-  // Gravedad
-  velocityY += gravity;
-  playerY -= velocityY;
-
-  onGround = false;
-
-  let playerRect = {
-    left: playerX,
-    right: playerX + 40,
-    bottom: playerY,
-    top: playerY + 70
-  };
-
-  platforms.forEach(platform=>{
-    let pLeft = parseFloat(platform.style.left);
-    let pBottom = parseFloat(platform.style.bottom);
-    let pWidth = parseFloat(platform.style.width);
-
-    let pRect = {
-      left: pLeft,
-      right: pLeft + pWidth,
-      bottom: pBottom,
-      top: pBottom + 20
-    };
-
-    // Colisión desde arriba
-    if(
-      playerRect.right > pRect.left &&
-      playerRect.left < pRect.right &&
-      playerRect.bottom <= pRect.top &&
-      playerRect.bottom >= pRect.top - 20 &&
-      velocityY >= 0
-    ){
-      playerY = pRect.top;
-      velocityY = 0;
-      onGround = true;
+jumpBtn.addEventListener("touchstart", () => {
+    if (onGround) {
+        velocityY = jumpPower;
+        onGround = false;
     }
-  });
+});
 
-  // Caída al vacío
-  if(playerY < 0){
-    message.innerText = "💀 Caíste al vacío - Recargando...";
-    setTimeout(()=> location.reload(),1500);
-  }
+// Controles teclado
+document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") movingLeft = true;
+    if (e.key === "ArrowRight") movingRight = true;
+    if (e.key === "ArrowUp" && onGround) {
+        velocityY = jumpPower;
+        onGround = false;
+    }
+});
 
-  // Cámara sigue al jugador
-  let cameraX = playerX - 300;
-  if(cameraX < 0) cameraX = 0;
-  world.style.transform = `translateX(${-cameraX}px)`;
+document.addEventListener("keyup", (e) => {
+    if (e.key === "ArrowLeft") movingLeft = false;
+    if (e.key === "ArrowRight") movingRight = false;
+});
 
-  player.style.left = playerX + "px";
-  player.style.bottom = playerY + "px";
+function checkPlatformCollision() {
+    const platforms = document.querySelectorAll(".platform");
+    onGround = false;
 
-  // Puntaje por avanzar
-  score = Math.floor(playerX / 10);
-  scoreDisplay.innerText = score;
+    platforms.forEach(platform => {
+        const pLeft = parseInt(platform.style.left);
+        const pBottom = parseInt(platform.style.bottom);
+        const pWidth = platform.offsetWidth;
+        const pHeight = platform.offsetHeight;
 
-  requestAnimationFrame(gameLoop);
+        if (
+            playerX + 40 > pLeft &&
+            playerX < pLeft + pWidth &&
+            playerY <= pBottom + pHeight &&
+            playerY > pBottom
+        ) {
+            playerY = pBottom + pHeight;
+            velocityY = 0;
+            onGround = true;
+        }
+    });
+}
+
+function updateScore() {
+    score = Math.floor(playerX / 50);
+    scoreDisplay.textContent = score;
+}
+
+function gameLoop() {
+
+    if (movingLeft) playerX -= playerSpeed;
+    if (movingRight) playerX += playerSpeed;
+
+    velocityY -= gravity;
+    playerY += velocityY;
+
+    if (playerY < 0) {
+        playerY = 0;
+        velocityY = 0;
+        onGround = true;
+    }
+
+    checkPlatformCollision();
+    updateScore();
+
+    // Cámara sigue al jugador
+    let cameraX = playerX - window.innerWidth / 3;
+    if (cameraX < 0) cameraX = 0;
+    world.style.transform = `translateX(${-cameraX}px)`;
+
+    player.style.left = playerX + "px";
+    player.style.bottom = playerY + "px";
+
+    requestAnimationFrame(gameLoop);
 }
 
 gameLoop();
