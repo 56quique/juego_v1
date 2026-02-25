@@ -4,36 +4,33 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mique World</title>
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>🌍 Mique World</h1>
-
-<div class="hud">
-  Puntaje: <span id="score">0</span>
-</div>
+<h1>🌎 Mique World</h1>
+<p>Puntaje: <span id="score">0</span></p>
 
 <div class="game">
-  <div class="world" id="world">
-    <div id="player">
-      <div class="hat"></div>
-      <div class="face"></div>
-      <div class="body"></div>
-      <div class="leg leg1"></div>
-      <div class="leg leg2"></div>
+    <div class="world" id="world">
+        <div id="player"></div>
+
+        <!-- Plataformas -->
+        <div class="platform" style="left:0px; bottom:0px; width:600px;"></div>
+        <div class="platform" style="left:700px; bottom:100px;"></div>
+        <div class="platform" style="left:1000px; bottom:180px;"></div>
+        <div class="platform" style="left:1400px; bottom:120px;"></div>
+        <div class="platform" style="left:1800px; bottom:200px;"></div>
+        <div class="platform" style="left:2200px; bottom:0px; width:800px;"></div>
     </div>
-  </div>
 </div>
 
 <div class="controls">
-  <button id="leftBtn">⬅</button>
-  <button id="jumpBtn">⬆</button>
-  <button id="rightBtn">➡</button>
+    <button id="leftBtn">⬅</button>
+    <button id="jumpBtn">⬆</button>
+    <button id="rightBtn">➡</button>
 </div>
 
-<p id="message"></p>
-
-<script src="script.js"></script>
+<script src="game.js"></script>
 </body>
 </html>
