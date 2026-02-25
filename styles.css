@@ -1,192 +1,39 @@
-body {
-    margin: 0;
-    text-align: center;
-    font-family: Arial;
-    background: #5c94fc;
-    overflow: hidden;
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mique World</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-h1 {
-    color: white;
-    text-shadow: 2px 2px black;
-}
+<h1>🌍 Mique World</h1>
 
-.scoreboard {
-    color: white;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
+<div class="hud">
+  Puntaje: <span id="score">0</span>
+</div>
 
-.game {
-    position: relative;
-    width: 100%;
-    max-width: 900px;
-    height: 320px;
-    margin: auto;
-    overflow: hidden;
-    background: linear-gradient(#5c94fc 70%, #d8a45d 70%);
-    border-bottom: 8px solid #8b4513;
-}
+<div class="game">
+  <div class="world" id="world">
+    <div id="player">
+      <div class="hat"></div>
+      <div class="face"></div>
+      <div class="body"></div>
+      <div class="leg leg1"></div>
+      <div class="leg leg2"></div>
+    </div>
+  </div>
+</div>
 
-/* NUBES */
-.cloud {
-    position: absolute;
-    width: 90px;
-    height: 45px;
-    background: white;
-    border-radius: 50px;
-}
+<div class="controls">
+  <button id="leftBtn">⬅</button>
+  <button id="jumpBtn">⬆</button>
+  <button id="rightBtn">➡</button>
+</div>
 
-.cloud::before,
-.cloud::after {
-    content: "";
-    position: absolute;
-    background: white;
-    border-radius: 50%;
-}
+<p id="message"></p>
 
-.cloud::before {
-    width: 50px;
-    height: 50px;
-    top: -20px;
-    left: 15px;
-}
-
-.cloud::after {
-    width: 60px;
-    height: 60px;
-    top: -30px;
-    right: 15px;
-}
-
-.cloud1 {
-    top: 50px;
-    animation: moveCloud 30s linear infinite;
-}
-
-.cloud2 {
-    top: 120px;
-    animation: moveCloud 45s linear infinite;
-}
-
-@keyframes moveCloud {
-    from { left: 100%; }
-    to { left: -150px; }
-}
-
-/* PERSONAJE */
-#player {
-    position: absolute;
-    bottom: 60px;
-    left: 80px;
-    width: 40px;
-    height: 70px;
-}
-
-/* Gorra */
-.hat {
-    width: 40px;
-    height: 15px;
-    background: red;
-    position: absolute;
-    top: 0;
-    border-radius: 5px 5px 0 0;
-}
-
-/* Cara */
-.face {
-    width: 30px;
-    height: 25px;
-    background: #ffcc99;
-    position: absolute;
-    top: 15px;
-    left: 5px;
-    border-radius: 50%;
-}
-
-/* Cuerpo */
-.body {
-    width: 35px;
-    height: 25px;
-    background: blue;
-    position: absolute;
-    bottom: 20px;
-    left: 2px;
-    border-radius: 5px;
-}
-
-/* Piernas */
-.leg {
-    width: 8px;
-    height: 20px;
-    background: brown;
-    position: absolute;
-    bottom: 0;
-}
-
-.leg1 {
-    left: 5px;
-    animation: runLegs 0.3s infinite alternate;
-}
-
-.leg2 {
-    right: 5px;
-    animation: runLegs 0.3s infinite alternate-reverse;
-}
-
-@keyframes runLegs {
-    from { height: 20px; }
-    to { height: 10px; }
-}
-
-/* SUELO */
-.ground {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 60px;
-    background: #8b4513;
-}
-
-/* OBSTÁCULOS */
-.obstacle {
-    width: 40px;
-    height: 40px;
-    background: #b5651d;
-    position: absolute;
-    bottom: 60px;
-}
-
-/* BOTÓN */
-.controls {
-    margin-top: 15px;
-}
-
-button {
-    padding: 15px 30px;
-    font-size: 20px;
-    border: none;
-    border-radius: 8px;
-}
-
-#message {
-    font-weight: bold;
-    font-size: 20px;
-    color: white;
-}
-/* MONEDA */
-.coin {
-    width: 25px;
-    height: 25px;
-    background: gold;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 120px;
-    box-shadow: 0 0 10px yellow;
-    animation: spin 0.6s infinite alternate;
-}
-
-@keyframes spin {
-    from { transform: scaleX(1); }
-    to { transform: scaleX(0.3); }
-}
+<script src="script.js"></script>
+</body>
+</html>
