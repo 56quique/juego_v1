@@ -19,15 +19,20 @@ let movingRight = false;
 let onGround = false;
 let score = 0;
 
-/* --- PREVENIR SCROLL CON FLECHAS --- */
+/* ==== SPRITE ANIMACIÓN ==== */
+let frame = 0;
+let frameTimer = 0;
+const totalFrames = 3;
+const frameWidth = 96; // ancho de cada frame
+
+/* --- PREVENIR SCROLL --- */
 window.addEventListener("keydown", function(e) {
     if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(e.key)) {
         e.preventDefault();
     }
 }, false);
 
-/* --- CONTROLES --- */
-
+/* --- CONTROLES TECLADO --- */
 document.addEventListener("keydown", (e) => {
     if (e.key === "ArrowLeft") movingLeft = true;
     if (e.key === "ArrowRight") movingRight = true;
@@ -42,8 +47,7 @@ document.addEventListener("keyup", (e) => {
     if (e.key === "ArrowRight") movingRight = false;
 });
 
-/* BOTONES CELULAR */
-
+/* --- BOTONES CELULAR --- */
 leftBtn.ontouchstart = () => movingLeft = true;
 leftBtn.ontouchend = () => movingLeft = false;
 
@@ -57,8 +61,7 @@ jumpBtn.ontouchstart = () => {
     }
 };
 
-/* --- PLATAFORMAS (más eficiente) --- */
-
+/* --- PLATAFORMAS --- */
 const platforms = document.querySelectorAll(".platform");
 
 function checkPlatforms() {
@@ -71,7 +74,7 @@ function checkPlatforms() {
         const pHeight = platform.offsetHeight;
 
         if (
-            playerX + 40 > pLeft &&
+            playerX + frameWidth > pLeft &&
             playerX < pLeft + pWidth &&
             playerY <= pBottom + pHeight &&
             playerY > pBottom
@@ -84,7 +87,6 @@ function checkPlatforms() {
 }
 
 /* --- GAME LOOP --- */
-
 function gameLoop() {
 
     if (movingLeft) playerX -= playerSpeed;
@@ -101,11 +103,35 @@ function gameLoop() {
 
     checkPlatforms();
 
-    // Puntaje por avance
+    /* ==== ANIMACIÓN ==== */
+    if (movingLeft || movingRight) {
+
+        frameTimer++;
+
+        if (frameTimer > 8) {
+            frame++;
+            if (frame >= totalFrames) frame = 0;
+            player.style.backgroundPosition = `-${frame * frameWidth}px 0px`;
+            frameTimer = 0;
+        }
+
+    } else {
+        frame = 0;
+        player.style.backgroundPosition = "0px 0px";
+    }
+
+    /* Giro */
+    if (movingLeft) {
+        player.style.transform = "scaleX(-1)";
+    } else if (movingRight) {
+        player.style.transform = "scaleX(1)";
+    }
+
+    /* Puntaje */
     score = Math.floor(playerX / 50);
     scoreDisplay.textContent = score;
 
-    // Cámara
+    /* Cámara */
     let cameraX = playerX - window.innerWidth / 3;
     if (cameraX < 0) cameraX = 0;
     world.style.transform = `translateX(${-cameraX}px)`;
