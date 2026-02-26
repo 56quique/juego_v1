@@ -12,37 +12,29 @@ let velocityY = 0;
 
 const gravity = 0.8;
 const jumpPower = 15;
-const playerSpeed = 5;
+const playerSpeed = 4;
 
 let movingLeft = false;
 let movingRight = false;
 let onGround = false;
-
 let score = 0;
 
-// TOUCH
-leftBtn.addEventListener("touchstart", () => movingLeft = true);
-leftBtn.addEventListener("touchend", () => movingLeft = false);
+/* --- PREVENIR SCROLL CON FLECHAS --- */
+window.addEventListener("keydown", function(e) {
+    if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(e.key)) {
+        e.preventDefault();
+    }
+}, false);
 
-rightBtn.addEventListener("touchstart", () => movingRight = true);
-rightBtn.addEventListener("touchend", () => movingRight = false);
+/* --- CONTROLES --- */
 
-jumpBtn.addEventListener("touchstart", jump);
-
-// CLICK (PC)
-leftBtn.addEventListener("mousedown", () => movingLeft = true);
-leftBtn.addEventListener("mouseup", () => movingLeft = false);
-
-rightBtn.addEventListener("mousedown", () => movingRight = true);
-rightBtn.addEventListener("mouseup", () => movingRight = false);
-
-jumpBtn.addEventListener("click", jump);
-
-// TECLADO
 document.addEventListener("keydown", (e) => {
     if (e.key === "ArrowLeft") movingLeft = true;
     if (e.key === "ArrowRight") movingRight = true;
-    if (e.key === "ArrowUp") jump();
+    if (e.key === "ArrowUp" && onGround) {
+        velocityY = jumpPower;
+        onGround = false;
+    }
 });
 
 document.addEventListener("keyup", (e) => {
@@ -50,38 +42,48 @@ document.addEventListener("keyup", (e) => {
     if (e.key === "ArrowRight") movingRight = false;
 });
 
-function jump() {
+/* BOTONES CELULAR */
+
+leftBtn.ontouchstart = () => movingLeft = true;
+leftBtn.ontouchend = () => movingLeft = false;
+
+rightBtn.ontouchstart = () => movingRight = true;
+rightBtn.ontouchend = () => movingRight = false;
+
+jumpBtn.ontouchstart = () => {
     if (onGround) {
         velocityY = jumpPower;
         onGround = false;
     }
-}
+};
+
+/* --- PLATAFORMAS (más eficiente) --- */
+
+const platforms = document.querySelectorAll(".platform");
 
 function checkPlatforms() {
-    const platforms = document.querySelectorAll(".platform");
     onGround = false;
 
     platforms.forEach(platform => {
-        const rect = platform.getBoundingClientRect();
-        const playerRect = player.getBoundingClientRect();
+        const pLeft = platform.offsetLeft;
+        const pBottom = parseInt(platform.style.bottom);
+        const pWidth = platform.offsetWidth;
+        const pHeight = platform.offsetHeight;
 
         if (
-            playerRect.bottom >= rect.top &&
-            playerRect.bottom <= rect.top + 20 &&
-            playerRect.right > rect.left &&
-            playerRect.left < rect.right
+            playerX + 40 > pLeft &&
+            playerX < pLeft + pWidth &&
+            playerY <= pBottom + pHeight &&
+            playerY > pBottom
         ) {
-            playerY = rect.top - world.getBoundingClientRect().top - 60;
+            playerY = pBottom + pHeight;
             velocityY = 0;
             onGround = true;
         }
     });
 }
 
-function updateScore() {
-    score = Math.floor(playerX / 50);
-    scoreDisplay.textContent = score;
-}
+/* --- GAME LOOP --- */
 
 function gameLoop() {
 
@@ -97,16 +99,19 @@ function gameLoop() {
         onGround = true;
     }
 
-    player.style.left = playerX + "px";
-    player.style.bottom = playerY + "px";
-
     checkPlatforms();
-    updateScore();
 
+    // Puntaje por avance
+    score = Math.floor(playerX / 50);
+    scoreDisplay.textContent = score;
+
+    // Cámara
     let cameraX = playerX - window.innerWidth / 3;
     if (cameraX < 0) cameraX = 0;
-
     world.style.transform = `translateX(${-cameraX}px)`;
+
+    player.style.left = playerX + "px";
+    player.style.bottom = playerY + "px";
 
     requestAnimationFrame(gameLoop);
 }
