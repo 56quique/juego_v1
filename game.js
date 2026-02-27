@@ -48,18 +48,41 @@ document.addEventListener("keyup", (e) => {
 });
 
 /* --- BOTONES CELULAR --- */
-leftBtn.ontouchstart = () => movingLeft = true;
-leftBtn.ontouchend = () => movingLeft = false;
+// --- BOTONES CELULAR (VERSIÓN DEFINITIVA) ---
 
-rightBtn.ontouchstart = () => movingRight = true;
-rightBtn.ontouchend = () => movingRight = false;
+function activarIzquierda(e) {
+    e.preventDefault();
+    movingLeft = true;
+}
 
-jumpBtn.ontouchstart = () => {
+function desactivarIzquierda() {
+    movingLeft = false;
+}
+
+function activarDerecha(e) {
+    e.preventDefault();
+    movingRight = true;
+}
+
+function desactivarDerecha() {
+    movingRight = false;
+}
+
+function saltar(e) {
+    e.preventDefault();
     if (onGround) {
         velocityY = jumpPower;
         onGround = false;
     }
-};
+}
+
+leftBtn.addEventListener("touchstart", activarIzquierda);
+leftBtn.addEventListener("touchend", desactivarIzquierda);
+
+rightBtn.addEventListener("touchstart", activarDerecha);
+rightBtn.addEventListener("touchend", desactivarDerecha);
+
+jumpBtn.addEventListener("touchstart", saltar);
 
 /* --- PLATAFORMAS --- */
 const platforms = document.querySelectorAll(".platform");
