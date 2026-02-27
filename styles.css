@@ -20,13 +20,13 @@ body {
     height: 100%;
 }
 
- #player {
+#player {
     position: absolute;
-    width: 120px;              /* tamaño visible en el juego */
-    height: 240px;             /* mantiene proporción 1:2 */
+    width: 128px;
+    height: 256px;
     background-image: url("./soldado-sprite.png");
     background-repeat: no-repeat;
-    background-size: 360px 240px; 
+    background-size: 384px 256px;
     bottom: 0;
     left: 100px;
 }
