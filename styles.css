@@ -4,6 +4,9 @@ body {
     background: linear-gradient(#5c94fc, #cce6ff);
     text-align: center;
 }
+button {
+    touch-action: none;
+}
 
 .game {
     width: 100%;
