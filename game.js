@@ -23,7 +23,7 @@ let score = 0;
 let frame = 0;
 let frameTimer = 0;
 const totalFrames = 3;
-const frameWidth = 120; // ancho de cada frame
+const frameWidth = 128; // ancho de cada frame
 
 /* --- PREVENIR SCROLL --- */
 window.addEventListener("keydown", function(e) {
