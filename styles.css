@@ -20,7 +20,7 @@ body {
     height: 100%;
 }
 
-/* #player {
+ #player {
     position: absolute;
     width: 96px;
     height: 128px;
@@ -29,7 +29,7 @@ body {
     background-size: 288px 128px;
     bottom: 0;
     left: 100px;
-}
+}/*
 #player {
     position: absolute;
     width: 150px;
@@ -41,12 +41,7 @@ body {
     bottom: 0;
     left: 100px;
 }*/
-#player {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    background: blue;
-}
+
 .platform {
     position: absolute;
     width: 200px;
