@@ -5,23 +5,18 @@ body {
   color: #e5e7eb;
 }
 
-/* HEADER */
 .header {
   text-align: center;
   padding: 15px;
   background: #020617;
-  border-bottom: 2px solid #1e293b;
 }
 
-/* MAIN */
 .main {
   display: grid;
-  grid-template-columns: 1fr;
   gap: 12px;
   padding: 10px;
 }
 
-/* PANEL */
 .panel {
   background: #1e293b;
   border-radius: 12px;
@@ -30,49 +25,39 @@ body {
 
 .panel-title {
   text-align: center;
-  margin-bottom: 10px;
 }
 
-/* BLOQUES */
 .block {
   margin-bottom: 10px;
 }
 
-.block h3 {
-  margin: 5px 0;
-  font-size: 14px;
-}
-
-/* GRID 3 COLUMNAS */
 .grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
 }
 
-/* PLACEHOLDER (luego serán gauges) */
-.placeholder {
-  background: #334155;
-  height: 80px;
+.gauge {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  font-size: 14px;
 }
 
-.placeholder.big {
-  height: 150px;
+.gauge canvas {
+  width: 100%;
+  height: 120px;
 }
 
-/* VALORES */
+.gauge span {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
 .values {
   display: flex;
   justify-content: space-around;
-  margin-top: 10px;
 }
 
-/* TRANSFERENCIA */
 .transfer {
   display: flex;
   gap: 5px;
@@ -86,37 +71,12 @@ body {
   border-radius: 6px;
 }
 
-/* HISTORICO */
 .history {
   background: #1e293b;
   border-radius: 12px;
   padding: 10px;
 }
 
-/* DESKTOP */
-@media (min-width: 768px) {
-  .main {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .transfer,
-  .history {
-    grid-column: span 2;
-  }
-}
-.gauge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.gauge canvas {
-  width: 100%;
-  height: 120px;
-}
-
-.gauge span {
-  margin-top: 4px;
-  font-size: 12px;
-  color: #94a3b8;
+.placeholder.big {
+  height: 150px;
 }
