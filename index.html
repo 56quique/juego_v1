@@ -1,37 +1,196 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<title>ATS - Panel SCADA</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mique World</title>
-<link rel="stylesheet" href="styles.css">
+
+<!-- Chart.js -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial;
+  background: #0b1220;
+  color: #e5e7eb;
+}
+
+.header {
+  text-align: center;
+  padding: 15px;
+  font-size: 20px;
+  color: #38bdf8;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  padding: 15px;
+}
+
+@media (min-width: 600px) {
+  .container { grid-template-columns: repeat(2, 1fr); }
+}
+
+.card {
+  background: #111827;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.status { font-size: 18px; font-weight: bold; }
+
+.ok { color: #22c55e; }
+.fail { color: #ef4444; }
+
+/* alarma */
+.alarm-box {
+  padding: 10px;
+  border-radius: 8px;
+  display: none;
+}
+
+.alarm-active {
+  display: block;
+  background: #7f1d1d;
+  color: #fecaca;
+}
+
+/* mediciones */
+.measure {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+}
+
+.value {
+  color: #38bdf8;
+  font-weight: bold;
+}
+</style>
+
 </head>
+
 <body>
 
-<h1>🌎 Mique World</h1>
-<p>Puntaje: <span id="score">0</span></p>
+<div class="header">⚡ ATS - Monitoreo</div>
 
-<div class="game">
-    <div class="world" id="world">
+<div class="container">
 
-        <div id="player"></div>
+  <!-- ENERGÍA -->
 
-        <div class="platform" style="left:0px; bottom:0px; width:800px;"></div>
-        <div class="platform" style="left:900px; bottom:120px;"></div>
-        <div class="platform" style="left:1300px; bottom:200px;"></div>
-        <div class="platform" style="left:1700px; bottom:150px;"></div>
-        <div class="platform" style="left:2200px; bottom:0px; width:1000px;"></div>
+  <div class="card">
+    <h3>Energía</h3>
+    <p class="status ok">Red OK</p>
+    <p class="status fail">Grupo FALLA</p>
+  </div>
 
-    </div>
+  <!-- ALARMA -->
+
+  <div class="card">
+    <h3>Alarmas</h3>
+    <div id="alarm" class="alarm-box">Falla de arranque</div>
+  </div>
+
+  <!-- RED -->
+
+  <div class="card">
+    <h3>Tensión Red</h3>
+    <div class="measure">L1 <span id="r1" class="value">220</span></div>
+    <div class="measure">L2 <span id="r2" class="value">221</span></div>
+    <div class="measure">L3 <span id="r3" class="value">219</span></div>
+  </div>
+
+  <!-- GRUPO -->
+
+  <div class="card">
+    <h3>Tensión Grupo</h3>
+    <div class="measure">L1 <span id="g1" class="value">0</span></div>
+    <div class="measure">L2 <span id="g2" class="value">0</span></div>
+    <div class="measure">L3 <span id="g3" class="value">0</span></div>
+  </div>
+
+  <!-- GRÁFICO -->
+
+  <div class="card" style="grid-column: span 2;">
+    <h3>Histórico de Tensión (Red)</h3>
+    <canvas id="chart"></canvas>
+  </div>
+
 </div>
 
-<div class="controls">
-    <button id="leftBtn">⬅</button>
-    <button id="jumpBtn">⬆</button>
-    <button id="rightBtn">➡</button>
-</div>
+<script>
 
-<script src="game.js"></script>
+// -------- ALARMA --------
+let falla = true;
+function actualizarAlarma() {
+  const a = document.getElementById("alarm");
+  if (falla) a.classList.add("alarm-active");
+  else a.classList.remove("alarm-active");
+}
+actualizarAlarma();
+
+// -------- DATOS --------
+let dataL1 = [];
+let dataL2 = [];
+let dataL3 = [];
+let labels = [];
+
+// -------- GRÁFICO --------
+const ctx = document.getElementById("chart");
+
+const chart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: labels,
+    datasets: [
+      { label: 'L1', data: dataL1, borderColor: 'red' },
+      { label: 'L2', data: dataL2, borderColor: 'green' },
+      { label: 'L3', data: dataL3, borderColor: 'blue' }
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { beginAtZero: false }
+    }
+  }
+});
+
+// -------- SIMULACIÓN --------
+setInterval(() => {
+
+  let v1 = 220 + Math.random()*5;
+  let v2 = 220 + Math.random()*5;
+  let v3 = 220 + Math.random()*5;
+
+  document.getElementById("r1").innerText = v1.toFixed(0);
+  document.getElementById("r2").innerText = v2.toFixed(0);
+  document.getElementById("r3").innerText = v3.toFixed(0);
+
+  // actualizar arrays
+  if (labels.length > 20) {
+    labels.shift();
+    dataL1.shift();
+    dataL2.shift();
+    dataL3.shift();
+  }
+
+  labels.push("");
+  dataL1.push(v1);
+  dataL2.push(v2);
+  dataL3.push(v3);
+
+  chart.update();
+
+}, 2000);
+
+</script>
 
 </body>
 </html>
