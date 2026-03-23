@@ -33,7 +33,7 @@ class Gauge {
   }
 
   draw() {
-    this.value += (this.target - this.value) * 0.1;
+    this.value += (this.target - this.value) * 0.05;
 
     const ctx = this.ctx;
     const w = this.canvas.clientWidth;
