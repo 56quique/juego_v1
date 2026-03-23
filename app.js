@@ -58,7 +58,7 @@ class Gauge {
     });
 
     // aguja
-    const ang = Math.PI * (1 - this.value / this.max);
+    const ang = Math.PI + (Math.PI * this.value / this.max);
 
     ctx.save();
     ctx.translate(cx, cy);
