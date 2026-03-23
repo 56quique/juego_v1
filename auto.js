@@ -15,9 +15,14 @@ class Gauge {
   }
 
   resize() {
-    this.canvas.width = this.canvas.clientWidth;
-    this.canvas.height = this.canvas.clientHeight;
-  }
+  const dpr = window.devicePixelRatio || 1;
+
+  this.canvas.width = this.canvas.clientWidth * dpr;
+  this.canvas.height = this.canvas.clientHeight * dpr;
+
+  this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+  this.ctx.scale(dpr, dpr);
+}
 
   update(value) {
     this.target = value;
