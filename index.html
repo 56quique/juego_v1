@@ -2,9 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SCADA Transferencia</title>
   <link rel="stylesheet" href="styles.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
@@ -14,12 +14,19 @@
 
 <main>
 
-  <!-- PANEL RED -->
+  <!-- RED -->
   <section class="panel">
     <h2>RED</h2>
 
-    <canvas id="gaugeVoltRed"></canvas>
-    <canvas id="gaugeAmpRed"></canvas>
+    <div class="grid-gauges">
+      <canvas id="vRedL1"></canvas>
+      <canvas id="vRedL2"></canvas>
+      <canvas id="vRedL3"></canvas>
+
+      <canvas id="iRedL1"></canvas>
+      <canvas id="iRedL2"></canvas>
+      <canvas id="iRedL3"></canvas>
+    </div>
 
     <div class="values">
       <div>kW: <span id="kwRed">0</span></div>
@@ -27,12 +34,19 @@
     </div>
   </section>
 
-  <!-- PANEL GENERADOR -->
+  <!-- GENERADOR -->
   <section class="panel">
     <h2>GENERADOR</h2>
 
-    <canvas id="gaugeVoltGen"></canvas>
-    <canvas id="gaugeAmpGen"></canvas>
+    <div class="grid-gauges">
+      <canvas id="vGenL1"></canvas>
+      <canvas id="vGenL2"></canvas>
+      <canvas id="vGenL3"></canvas>
+
+      <canvas id="iGenL1"></canvas>
+      <canvas id="iGenL2"></canvas>
+      <canvas id="iGenL3"></canvas>
+    </div>
 
     <div class="values">
       <div>kW: <span id="kwGen">0</span></div>
@@ -48,13 +62,13 @@
     <div class="state" id="stateGen">GRUPO</div>
   </section>
 
-  <!-- HISTORICO -->
+  <!-- HISTORICO (base) -->
   <section class="history">
     <canvas id="chart"></canvas>
   </section>
 
 </main>
 
-<script src="auto.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
