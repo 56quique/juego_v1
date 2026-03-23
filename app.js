@@ -112,8 +112,43 @@ const gauges = [
 ];
 
 // SIMULACION
+// =======================
+// SIMULACIÓN REALISTA
+// =======================
+
+let valores = {
+  vRed: [220, 221, 219],
+  iRed: [50, 55, 60],
+  vGen: [0, 0, 0],
+  iGen: [0, 0, 0]
+};
+
+function variar(base, min, max, paso = 0.8) {
+  let v = base + (Math.random() - 0.5) * paso;
+
+  if (v < min) v = min;
+  if (v > max) v = max;
+
+  return v;
+}
+
 setInterval(() => {
-  gauges.forEach(g => g?.update(Math.random() * g.max));
+
+  // RED (tensión más estable)
+  valores.vRed = valores.vRed.map(v => variar(v, 200, 230, 1));
+
+  // RED (corriente más variable)
+  valores.iRed = valores.iRed.map(i => variar(i, 40, 120, 3));
+
+  // ACTUALIZAR GAUGES RED
+  gauges[0]?.update(valores.vRed[0]);
+  gauges[1]?.update(valores.vRed[1]);
+  gauges[2]?.update(valores.vRed[2]);
+
+  gauges[3]?.update(valores.iRed[0]);
+  gauges[4]?.update(valores.iRed[1]);
+  gauges[5]?.update(valores.iRed[2]);
+
 }, 500);
 
 // LOOP
