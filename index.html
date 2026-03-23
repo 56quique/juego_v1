@@ -1,221 +1,59 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ATS SCADA PRO</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script><style>
-:root{
-  --bg:#0b1220;
-  --card:#111827;
-  --text:#e5e7eb;
-}
-body{
-  margin:0;
-  font-family:Arial;
-  background:var(--bg);
-  color:var(--text);
-}
-.header{
-  text-align:center;
-  padding:10px;
-  font-weight:bold;
-}
-.container{
-  display:grid;
-  gap:10px;
-  padding:10px;
-  grid-template-columns:1fr;
-}
-@media(min-width:700px){
-  .container{grid-template-columns:repeat(2,1fr);}
-}
-@media(min-width:1100px){
-  .container{grid-template-columns:repeat(3,1fr);}
-}
-.card{
-  background:var(--card);
-  border-radius:12px;
-  padding:10px;
-}
+  <meta charset="UTF-8">
+  <title>SCADA Transferencia</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-/* GAUGE */
-.gauge{
-  width:100%;
-  max-width:180px;
-  margin:auto;
-  position:relative;
-}
-.value-center{
-  position:absolute;
-  top:60%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  text-align:center;
-}
-.val{font-size:20px;font-weight:bold;}
-.unit{font-size:12px;color:#9ca3af;}
+<header>
+  <h1>SCADA - Transferencia Automática</h1>
+</header>
 
-/* GRID GAUGES */
-.row{
-  display:flex;
-  justify-content:space-around;
-  flex-wrap:wrap;
-}
+<main>
 
-/* ALARMA */
-.alarm{
-  display:none;
-  background:#7f1d1d;
-  padding:10px;
-  text-align:center;
-  border-radius:10px;
-}
-.alarm.active{display:block;}
-</style></head><body><div class="header">⚡ ATS SCADA PRO</div><div class="container"><div class="card">
-<h3>Alarmas</h3>
-<div id="alarm" class="alarm">⚠ Fuera de rango</div>
-</div><div class="card">
-<h3>Tensión (V)</h3>
-<div class="row" id="voltajes"></div>
-</div><div class="card">
-<h3>Corriente (A)</h3>
-<div class="row" id="corrientes"></div>
-</div><div class="card" style="grid-column:1/-1;">
-<h3>Histórico L1</h3>
-<canvas id="chart"></canvas>
-</div></div><script>
+  <!-- PANEL RED -->
+  <section class="panel">
+    <h2>RED</h2>
 
-// ===== CREAR GAUGE =====
-function crearGauge(container,id,unidad,min,max,tipo){
+    <canvas id="gaugeVoltRed"></canvas>
+    <canvas id="gaugeAmpRed"></canvas>
 
-let html=`
-<div class="gauge">
-<svg viewBox="0 0 200 120">
+    <div class="values">
+      <div>kW: <span id="kwRed">0</span></div>
+      <div>FP: <span id="fpRed">0</span></div>
+    </div>
+  </section>
 
-${tipo==="V" ? `
-<path d="M10 100 A90 90 0 0 1 80 20" stroke="#ef4444" stroke-width="12"/>
-<path d="M80 20 A90 90 0 0 1 140 20" stroke="#22c55e" stroke-width="12"/>
-<path d="M140 20 A90 90 0 0 1 190 100" stroke="#ef4444" stroke-width="12"/>
-` : `
-<path d="M10 100 A90 90 0 0 1 100 20" stroke="#22c55e" stroke-width="12"/>
-<path d="M100 20 A90 90 0 0 1 140 40" stroke="#f59e0b" stroke-width="12"/>
-<path d="M140 40 A90 90 0 0 1 190 100" stroke="#ef4444" stroke-width="12"/>
-`}
+  <!-- PANEL GENERADOR -->
+  <section class="panel">
+    <h2>GENERADOR</h2>
 
-<g id="ticks_${id}"></g>
+    <canvas id="gaugeVoltGen"></canvas>
+    <canvas id="gaugeAmpGen"></canvas>
 
-<g id="needle_${id}" style="transform-origin:100px 100px;">
-<line x1="100" y1="100" x2="100" y2="30" stroke="white" stroke-width="4"/>
-</g>
+    <div class="values">
+      <div>kW: <span id="kwGen">0</span></div>
+      <div>FP: <span id="fpGen">0</span></div>
+    </div>
+  </section>
 
-<circle cx="100" cy="100" r="5" fill="white"/>
+  <!-- ESTADO -->
+  <section class="transfer">
+    <div class="state" id="stateRed">RED</div>
+    <div class="state" id="stateFail">FALLA</div>
+    <div class="state" id="stateStart">ARRANQUE</div>
+    <div class="state" id="stateGen">GRUPO</div>
+  </section>
 
-</svg>
+  <!-- HISTORICO -->
+  <section class="history">
+    <canvas id="chart"></canvas>
+  </section>
 
-<div class="value-center">
-<div class="val" id="val_${id}">0</div>
-<div class="unit">${unidad}</div>
-</div>
-</div>
-`;
+</main>
 
-container.innerHTML += html;
-
-// ticks
-let g=document.getElementById(`ticks_${id}`);
-for(let v=min;v<=max;v+=10){
-let ang=-90+(v/(max-min))*180;
-let rad=ang*Math.PI/180;
-
-let r1=(v%50==0)?70:80;
-let r2=90;
-
-let x1=100+r1*Math.cos(rad);
-let y1=100+r1*Math.sin(rad);
-let x2=100+r2*Math.cos(rad);
-let y2=100+r2*Math.sin(rad);
-
-let l=document.createElementNS("http://www.w3.org/2000/svg","line");
-l.setAttribute("x1",x1);
-l.setAttribute("y1",y1);
-l.setAttribute("x2",x2);
-l.setAttribute("y2",y2);
-l.setAttribute("stroke","#6b7280");
-g.appendChild(l);
-}
-}
-
-// ===== CREAR TODOS =====
-let voltContainer=document.getElementById("voltajes");
-["L1","L2","L3"].forEach(f=>crearGauge(voltContainer,f,"V",0,300,"V"));
-
-let corrContainer=document.getElementById("corrientes");
-["I1","I2","I3"].forEach(f=>crearGauge(corrContainer,f,"A",0,200,"I"));
-
-// ===== ACTUALIZAR =====
-function colorV(v){
-  if(v<210) return "#ef4444";
-  if(v<=240) return "#22c55e";
-  return "#ef4444";
-}
-function colorI(i){
-  if(i<150) return "#22c55e";
-  if(i<=170) return "#f59e0b";
-  return "#ef4444";
-}
-
-function setGauge(id,val,min,max,colorFn){
-let ang=-90+(val/(max-min))*180;
-let needle=document.getElementById(`needle_${id}`);
-needle.style.transform=`rotate(${ang}deg)`;
-needle.querySelector("line").setAttribute("stroke",colorFn(val));
-document.getElementById(`val_${id}`).innerText=val.toFixed(0);
-}
-
-// ===== CHART =====
-const chart=new Chart(document.getElementById("chart"),{
-type:"line",
-data:{labels:[],datasets:[{data:[],borderColor:"#22c55e"}]},
-options:{responsive:true,animation:false}
-});
-
-function refreshChart(){
-let labels=[],data=[];
-for(let i=0;i<20;i++){
-labels.push(i);
-data.push(220+Math.random()*10);
-}
-chart.data.labels=labels;
-chart.data.datasets[0].data=data;
-chart.update();
-}
-setInterval(refreshChart,10000);
-refreshChart();
-
-// ===== LOOP =====
-setInterval(()=>{
-
-let v1=220+Math.random()*40-20;
-let v2=220+Math.random()*40-20;
-let v3=220+Math.random()*40-20;
-
-let i1=Math.random()*200;
-let i2=Math.random()*200;
-let i3=Math.random()*200;
-
-setGauge("L1",v1,0,300,colorV);
-setGauge("L2",v2,0,300,colorV);
-setGauge("L3",v3,0,300,colorV);
-
-setGauge("I1",i1,0,200,colorI);
-setGauge("I2",i2,0,200,colorI);
-setGauge("I3",i3,0,200,colorI);
-
-// alarma
-let alarma = (v1<210||v1>240||v2<210||v2>240||v3<210||v3>240||i1>170||i2>170||i3>170);
-document.getElementById("alarm").classList.toggle("active",alarma);
-
-},2000);
-
-</script></body>
+<script src="app.js"></script>
+</body>
 </html>
