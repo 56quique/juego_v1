@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCADA Transferencia</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <h1>SCADA - Transferencia Automática</h1>
+</header>
+
+<!-- CONTENIDO PRINCIPAL -->
+<main class="main">
+
+  <!-- ===================== -->
+  <!-- PANEL RED -->
+  <!-- ===================== -->
+  <section class="panel">
+    <h2 class="panel-title">RED</h2>
+
+    <!-- TENSIONES -->
+    <div class="block">
+      <h3>Tensión (V)</h3>
+      <div class="grid-3">
+        <div class="placeholder">L1</div>
+        <div class="placeholder">L2</div>
+        <div class="placeholder">L3</div>
+      </div>
+    </div>
+
+    <!-- CORRIENTES -->
+    <div class="block">
+      <h3>Corriente (A)</h3>
+      <div class="grid-3">
+        <div class="placeholder">L1</div>
+        <div class="placeholder">L2</div>
+        <div class="placeholder">L3</div>
+      </div>
+    </div>
+
+    <!-- VALORES -->
+    <div class="values">
+      <div>Potencia: <span>-- kW</span></div>
+      <div>FP: <span>--</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== -->
+  <!-- PANEL GENERADOR -->
+  <!-- ===================== -->
+  <section class="panel">
+    <h2 class="panel-title">GENERADOR</h2>
+
+    <!-- TENSIONES -->
+    <div class="block">
+      <h3>Tensión (V)</h3>
+      <div class="grid-3">
+        <div class="placeholder">L1</div>
+        <div class="placeholder">L2</div>
+        <div class="placeholder">L3</div>
+      </div>
+    </div>
+
+    <!-- CORRIENTES -->
+    <div class="block">
+      <h3>Corriente (A)</h3>
+      <div class="grid-3">
+        <div class="placeholder">L1</div>
+        <div class="placeholder">L2</div>
+        <div class="placeholder">L3</div>
+      </div>
+    </div>
+
+    <!-- VALORES -->
+    <div class="values">
+      <div>Potencia: <span>-- kW</span></div>
+      <div>FP: <span>--</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== -->
+  <!-- ESTADO DE TRANSFERENCIA -->
+  <!-- ===================== -->
+  <section class="transfer">
+    <div class="state">RED</div>
+    <div class="state">FALLA</div>
+    <div class="state">ARRANQUE</div>
+    <div class="state">GRUPO</div>
+  </section>
+
+  <!-- ===================== -->
+  <!-- HISTÓRICO -->
+  <!-- ===================== -->
+  <section class="history">
+    <div class="placeholder big">Gráfico histórico</div>
+  </section>
+
+</main>
+
+</body>
+</html>
