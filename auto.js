@@ -1,7 +1,3 @@
-// =======================
-// GAUGE CLASS
-// =======================
-
 class Gauge {
   constructor(canvas, max, zones) {
     this.canvas = canvas;
@@ -18,16 +14,14 @@ class Gauge {
 
   resize() {
     const dpr = window.devicePixelRatio || 1;
-
     this.canvas.width = this.canvas.clientWidth * dpr;
     this.canvas.height = this.canvas.clientHeight * dpr;
-
     this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.scale(dpr, dpr);
   }
 
   update(value) {
-    this.target = value;
+    this.target = Math.max(0, Math.min(this.max, value));
   }
 
   draw() {
@@ -43,57 +37,49 @@ class Gauge {
 
     ctx.clearRect(0, 0, w, h);
 
-    // =====================
-    // ZONAS DE COLOR
-    // =====================
-    this.zones.forEach(zone => {
-      const start = Math.PI * (1 - zone.from / this.max);
-      const end = Math.PI * (1 - zone.to / this.max);
+    // ZONAS
+    this.zones.forEach(z => {
+      const start = Math.PI * (1 - z.from / this.max);
+      const end = Math.PI * (1 - z.to / this.max);
 
       ctx.beginPath();
       ctx.arc(cx, cy, r, start, end, true);
-      ctx.strokeStyle = zone.color;
+      ctx.strokeStyle = z.color;
       ctx.lineWidth = 10;
       ctx.stroke();
     });
 
-    // =====================
-    // ESCALA (marcas)
-    // =====================
-    for (let i = 0; i <= this.max; i += this.max / 10) {
-      const angle = Math.PI * (1 - i / this.max);
+    // ESCALA
+    for (let i = 0; i <= 10; i++) {
+      const val = (this.max / 10) * i;
+      const ang = Math.PI * (1 - val / this.max);
 
-      const x1 = cx + Math.cos(angle) * (r - 10);
-      const y1 = cy + Math.sin(angle) * (r - 10);
-
-      const x2 = cx + Math.cos(angle) * r;
-      const y2 = cy + Math.sin(angle) * r;
+      const x1 = cx + Math.cos(ang) * (r - 10);
+      const y1 = cy + Math.sin(ang) * (r - 10);
+      const x2 = cx + Math.cos(ang) * r;
+      const y2 = cy + Math.sin(ang) * r;
 
       ctx.beginPath();
       ctx.moveTo(x1, y1);
       ctx.lineTo(x2, y2);
       ctx.strokeStyle = "#e5e7eb";
-      ctx.lineWidth = 2;
       ctx.stroke();
 
-      // números
-      const tx = cx + Math.cos(angle) * (r - 25);
-      const ty = cy + Math.sin(angle) * (r - 25);
+      const tx = cx + Math.cos(ang) * (r - 25);
+      const ty = cy + Math.sin(ang) * (r - 25);
 
       ctx.fillStyle = "#e5e7eb";
-      ctx.font = "12px Arial";
+      ctx.font = "10px Arial";
       ctx.textAlign = "center";
-      ctx.fillText(Math.round(i), tx, ty);
+      ctx.fillText(Math.round(val), tx, ty);
     }
 
-    // =====================
     // AGUJA
-    // =====================
-    const angle = Math.PI * (1 - this.value / this.max);
+    const ang = Math.PI * (1 - this.value / this.max);
 
     ctx.save();
     ctx.translate(cx, cy);
-    ctx.rotate(angle);
+    ctx.rotate(ang);
 
     ctx.beginPath();
     ctx.moveTo(-5, 0);
@@ -104,36 +90,21 @@ class Gauge {
 
     ctx.restore();
 
-    // =====================
     // CENTRO
-    // =====================
     ctx.beginPath();
-    ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+    ctx.arc(cx, cy, 5, 0, Math.PI * 2);
     ctx.fillStyle = "#000";
     ctx.fill();
-
-    // =====================
-    // VALOR NUMÉRICO
-    // =====================
-    ctx.fillStyle = "#e5e7eb";
-    ctx.font = "bold 16px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText(this.value.toFixed(0), cx, cy - r * 0.3);
   }
 }
 
-// =======================
-// INSTANCIAS
-// =======================
-
-// TENSIÓN
+// ZONAS
 const voltZones = [
   { from: 0, to: 210, color: "#ef4444" },
   { from: 210, to: 240, color: "#22c55e" },
   { from: 240, to: 300, color: "#ef4444" }
 ];
 
-// CORRIENTE
 const ampZones = [
   { from: 0, to: 120, color: "#22c55e" },
   { from: 120, to: 140, color: "#f59e0b" },
@@ -141,23 +112,62 @@ const ampZones = [
 ];
 
 // INSTANCIAS
-const gVoltRed = new Gauge(document.getElementById("gaugeVoltRed"), 300, voltZones);
-const gAmpRed = new Gauge(document.getElementById("gaugeAmpRed"), 150, ampZones);
+const vRed = [
+  new Gauge(document.getElementById("vRedL1"), 300, voltZones),
+  new Gauge(document.getElementById("vRedL2"), 300, voltZones),
+  new Gauge(document.getElementById("vRedL3"), 300, voltZones)
+];
 
-const gVoltGen = new Gauge(document.getElementById("gaugeVoltGen"), 300, voltZones);
-const gAmpGen = new Gauge(document.getElementById("gaugeAmpGen"), 150, ampZones);
+const iRed = [
+  new Gauge(document.getElementById("iRedL1"), 150, ampZones),
+  new Gauge(document.getElementById("iRedL2"), 150, ampZones),
+  new Gauge(document.getElementById("iRedL3"), 150, ampZones)
+];
 
-// =======================
-// UI UPDATE
-// =======================
+const vGen = [
+  new Gauge(document.getElementById("vGenL1"), 300, voltZones),
+  new Gauge(document.getElementById("vGenL2"), 300, voltZones),
+  new Gauge(document.getElementById("vGenL3"), 300, voltZones)
+];
 
+const iGen = [
+  new Gauge(document.getElementById("iGenL1"), 150, ampZones),
+  new Gauge(document.getElementById("iGenL2"), 150, ampZones),
+  new Gauge(document.getElementById("iGenL3"), 150, ampZones)
+];
+
+// SIMULACIÓN
+let t = 0;
+
+function getData() {
+  t += 0.02;
+
+  const redOK = Math.sin(t) > -0.3;
+
+  return {
+    red: {
+      v: redOK ? [220, 222, 218].map(v => v + Math.random()*5) : [0,0,0],
+      a: redOK ? [60, 55, 65].map(a => a + Math.random()*5) : [0,0,0],
+      kw: redOK ? 35 : 0,
+      fp: redOK ? 0.92 : 0
+    },
+    gen: {
+      v: !redOK ? [230, 231, 229] : [0,0,0],
+      a: !redOK ? [50, 48, 52] : [0,0,0],
+      kw: !redOK ? 28 : 0,
+      fp: !redOK ? 0.95 : 0
+    },
+    state: redOK ? "RED" : "FALLA"
+  };
+}
+
+// UI
 function updateUI(data) {
+  data.red.v.forEach((v, i) => vRed[i].update(v));
+  data.red.a.forEach((a, i) => iRed[i].update(a));
 
-  gVoltRed.update(data.red.v);
-  gAmpRed.update(data.red.a);
-
-  gVoltGen.update(data.gen.v);
-  gAmpGen.update(data.gen.a);
+  data.gen.v.forEach((v, i) => vGen[i].update(v));
+  data.gen.a.forEach((a, i) => iGen[i].update(a));
 
   document.getElementById("kwRed").innerText = data.red.kw.toFixed(1);
   document.getElementById("fpRed").innerText = data.red.fp.toFixed(2);
@@ -165,27 +175,29 @@ function updateUI(data) {
   document.getElementById("kwGen").innerText = data.gen.kw.toFixed(1);
   document.getElementById("fpGen").innerText = data.gen.fp.toFixed(2);
 
-  document.querySelectorAll(".state").forEach(e => e.classList.remove("active"));
+  document.querySelectorAll(".state").forEach(e =>
+    e.classList.remove("active", "alarm", "warning")
+  );
 
-  if (data.state === "RED") document.getElementById("stateRed").classList.add("active");
-  if (data.state === "FALLA") document.getElementById("stateFail").classList.add("alarm");
+  if (data.state === "RED") {
+    document.getElementById("stateRed").classList.add("active");
+  } else {
+    document.getElementById("stateFail").classList.add("alarm");
+  }
 }
 
-// =======================
 // LOOP
-// =======================
-
 function loop() {
   const data = getData();
 
   updateUI(data);
 
-  gVoltRed.draw();
-  gAmpRed.draw();
-  gVoltGen.draw();
-  gAmpGen.draw();
+  vRed.forEach(g => g.draw());
+  iRed.forEach(g => g.draw());
+  vGen.forEach(g => g.draw());
+  iGen.forEach(g => g.draw());
 
   requestAnimationFrame(loop);
 }
 
-loop();
+window.onload = loop;
