@@ -1,195 +1,302 @@
 <!DOCTYPE html><html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>ATS - Panel SCADA</title>
+<title>ATS - Panel SCADA PRO</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><style>
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #0b1220;
-  color: #e5e7eb;
+:root{
+  --bg:#0b1220; --card:#111827; --muted:#9ca3af; --accent:#38bdf8;
+  --green:#22c55e; --yellow:#f59e0b; --red:#ef4444;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; font-family: "Segoe UI", Arial;
+  background:var(--bg); color:#e5e7eb;
+}
+.header{
+  text-align:center; padding:14px; font-weight:700; color:var(--accent);
+  letter-spacing:.5px;
 }
 
-.header {
-  text-align: center;
-  padding: 15px;
-  color: #38bdf8;
-}
-
-.container {
-  display: grid;
+/* GRID RESPONSIVE */
+.container{
+  display:grid; gap:12px; padding:12px;
   grid-template-columns: 1fr;
-  gap: 15px;
-  padding: 15px;
+}
+@media (min-width: 600px){
+  .container{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1000px){
+  .container{ grid-template-columns: repeat(3, 1fr); }
 }
 
-@media (min-width: 700px) {
-  .container { grid-template-columns: repeat(2, 1fr); }
+.card{
+  background:var(--card); border-radius:14px; padding:12px;
+  box-shadow:0 6px 16px rgba(0,0,0,.5);
 }
-
-.card {
-  background: #111827;
-  padding: 15px;
-  border-radius: 12px;
-  text-align: center;
-}
-
-/* GAUGE */
-.gauge {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: #1f2937;
-  margin: 10px auto;
-}
-
-.needle {
-  position: absolute;
-  width: 2px;
-  height: 50px;
-  background: red;
-  top: 10px;
-  left: 50%;
-  transform-origin: bottom center;
-  transform: rotate(-90deg);
-}
-
-.center-dot {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: white;
-  border-radius: 50%;
-  top: 55px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.value {
-  margin-top: 5px;
-  font-weight: bold;
-  color: #38bdf8;
-}
-
-.gauge-container {
-  display: flex;
-  justify-content: space-around;
+.card h3{
+  margin:0 0 8px 0; font-size:14px; color:var(--muted); text-align:center;
 }
 
 /* ALARMA */
-.alarm-box {
-  padding: 10px;
-  border-radius: 8px;
-  display: none;
+.alarm{
+  display:none; text-align:center; padding:10px; border-radius:10px;
+  background:#7f1d1d; color:#fecaca; font-weight:700;
+}
+.alarm.active{ display:block; }
+
+/* GAUGE SVG */
+.gauges-row{
+  display:flex; gap:10px; justify-content:space-between; flex-wrap:wrap;
+}
+.gauge{
+  flex:1; min-width: 100px; max-width: 160px;
+  display:flex; flex-direction:column; align-items:center;
+}
+.gauge svg{
+  width:100%; height:auto; display:block;
+}
+.label{
+  margin-top:4px; font-size:12px; color:var(--muted);
+}
+.value{
+  margin-top:2px; font-weight:700; color:var(--accent);
 }
 
-.alarm-active {
-  display: block;
-  background: #7f1d1d;
-  color: #fecaca;
+/* CHART ocupa ancho completo en desktop */
+.span-2{ grid-column: span 1; }
+@media (min-width: 600px){
+  .span-2{ grid-column: span 2; }
 }
-</style></head><body><div class="header">⚡ ATS - Panel</div><div class="container">  <!-- ALARMA -->  <div class="card">
+@media (min-width: 1000px){
+  .span-2{ grid-column: span 3; }
+}
+</style></head><body>
+<div class="header">⚡ ATS - Panel SCADA PRO</div><div class="container">  <!-- ALARMA -->  <div class="card">
     <h3>Alarmas</h3>
-    <div id="alarm" class="alarm-box">Falla de arranque</div>
-  </div>  <!-- GAUGES -->  <div class="card">
-    <h3>Tensión Red</h3>
-    <div class="gauge-container">  <div>
-    <div class="gauge">
-      <div class="needle" id="n1"></div>
-      <div class="center-dot"></div>
-    </div>
-    <div class="value" id="v1">220</div>
+    <div id="alarm" class="alarm">Falla de arranque</div>
+  </div>  <!-- TENSIÓN RED -->  <div class="card">
+    <h3>Tensión Red (V)</h3>
+    <div class="gauges-row" id="gaugesVolt">
+      <!-- L1 -->
+      <div class="gauge">
+        <svg viewBox="0 0 200 120">
+          <!-- zonas -->
+          <path d="M10 100 A90 90 0 0 1 70 20" stroke="var(--green)" stroke-width="10" fill="none"/>
+          <path d="M70 20 A90 90 0 0 1 130 20" stroke="var(--yellow)" stroke-width="10" fill="none"/>
+          <path d="M130 20 A90 90 0 0 1 190 100" stroke="var(--red)" stroke-width="10" fill="none"/>      <!-- escala -->
+      <g id="ticksV1"></g>
+
+      <!-- aguja -->
+      <g id="needleV1" style="transform-origin:100px 100px;">
+        <line x1="100" y1="100" x2="100" y2="25" stroke="#ef4444" stroke-width="3"/>
+      </g>
+      <circle cx="100" cy="100" r="4" fill="#fff"/>
+    </svg>
+    <div class="label">L1</div>
+    <div class="value" id="valV1">0</div>
   </div>
 
-  <div>
-    <div class="gauge">
-      <div class="needle" id="n2"></div>
-      <div class="center-dot"></div>
-    </div>
-    <div class="value" id="v2">220</div>
+  <!-- L2 -->
+  <div class="gauge">
+    <svg viewBox="0 0 200 120">
+      <path d="M10 100 A90 90 0 0 1 70 20" stroke="var(--green)" stroke-width="10" fill="none"/>
+      <path d="M70 20 A90 90 0 0 1 130 20" stroke="var(--yellow)" stroke-width="10" fill="none"/>
+      <path d="M130 20 A90 90 0 0 1 190 100" stroke="var(--red)" stroke-width="10" fill="none"/>
+      <g id="ticksV2"></g>
+      <g id="needleV2" style="transform-origin:100px 100px;">
+        <line x1="100" y1="100" x2="100" y2="25" stroke="#ef4444" stroke-width="3"/>
+      </g>
+      <circle cx="100" cy="100" r="4" fill="#fff"/>
+    </svg>
+    <div class="label">L2</div>
+    <div class="value" id="valV2">0</div>
   </div>
 
-  <div>
-    <div class="gauge">
-      <div class="needle" id="n3"></div>
-      <div class="center-dot"></div>
-    </div>
-    <div class="value" id="v3">220</div>
+  <!-- L3 -->
+  <div class="gauge">
+    <svg viewBox="0 0 200 120">
+      <path d="M10 100 A90 90 0 0 1 70 20" stroke="var(--green)" stroke-width="10" fill="none"/>
+      <path d="M70 20 A90 90 0 0 1 130 20" stroke="var(--yellow)" stroke-width="10" fill="none"/>
+      <path d="M130 20 A90 90 0 0 1 190 100" stroke="var(--red)" stroke-width="10" fill="none"/>
+      <g id="ticksV3"></g>
+      <g id="needleV3" style="transform-origin:100px 100px;">
+        <line x1="100" y1="100" x2="100" y2="25" stroke="#ef4444" stroke-width="3"/>
+      </g>
+      <circle cx="100" cy="100" r="4" fill="#fff"/>
+    </svg>
+    <div class="label">L3</div>
+    <div class="value" id="valV3">0</div>
   </div>
-
 </div>
 
-  </div>  <!-- GRÁFICO -->  <div class="card" style="grid-column: span 2;">
-    <h3>Histórico</h3>
+  </div>  <!-- CORRIENTE RED -->  <div class="card">
+    <h3>Corriente Red (A)</h3>
+    <div class="gauges-row">
+      <!-- I1 -->
+      <div class="gauge">
+        <svg viewBox="0 0 200 120">
+          <path d="M10 100 A90 90 0 0 1 70 20" stroke="var(--green)" stroke-width="10" fill="none"/>
+          <path d="M70 20 A90 90 0 0 1 130 20" stroke="var(--yellow)" stroke-width="10" fill="none"/>
+          <path d="M130 20 A90 90 0 0 1 190 100" stroke="var(--red)" stroke-width="10" fill="none"/>
+          <g id="ticksI1"></g>
+          <g id="needleI1" style="transform-origin:100px 100px;">
+            <line x1="100" y1="100" x2="100" y2="25" stroke="#ef4444" stroke-width="3"/>
+          </g>
+          <circle cx="100" cy="100" r="4" fill="#fff"/>
+        </svg>
+        <div class="label">L1</div>
+        <div class="value" id="valI1">0</div>
+      </div>  <!-- I2 -->
+  <div class="gauge">
+    <svg viewBox="0 0 200 120">
+      <path d="M10 100 A90 90 0 0 1 70 20" stroke="var(--green)" stroke-width="10" fill="none"/>
+      <path d="M70 20 A90 90 0 0 1 130 20" stroke="var(--yellow)" stroke-width="10" fill="none"/>
+      <path d="M130 20 A90 90 0 0 1 190 100" stroke="var(--red)" stroke-width="10" fill="none"/>
+      <g id="ticksI2"></g>
+      <g id="needleI2" style="transform-origin:100px 100px;">
+        <line x1="100" y1="100" x2="100" y2="25" stroke="#ef4444" stroke-width="3"/>
+      </g>
+      <circle cx="100" cy="100" r="4" fill="#fff"/>
+    </svg>
+    <div class="label">L2</div>
+    <div class="value" id="valI2">0</div>
+  </div>
+
+  <!-- I3 -->
+  <div class="gauge">
+    <svg viewBox="0 0 200 120">
+      <path d="M10 100 A90 90 0 0 1 70 20" stroke="var(--green)" stroke-width="10" fill="none"/>
+      <path d="M70 20 A90 90 0 0 1 130 20" stroke="var(--yellow)" stroke-width="10" fill="none"/>
+      <path d="M130 20 A90 90 0 0 1 190 100" stroke="var(--red)" stroke-width="10" fill="none"/>
+      <g id="ticksI3"></g>
+      <g id="needleI3" style="transform-origin:100px 100px;">
+        <line x1="100" y1="100" x2="100" y2="25" stroke="#ef4444" stroke-width="3"/>
+      </g>
+      <circle cx="100" cy="100" r="4" fill="#fff"/>
+    </svg>
+    <div class="label">L3</div>
+    <div class="value" id="valI3">0</div>
+  </div>
+</div>
+
+  </div>  <!-- GRÁFICO -->  <div class="card span-2">
+    <h3>Histórico Tensión L1 (refresco por ventana)</h3>
     <canvas id="chart"></canvas>
   </div></div><script>
-
-// -------- ALARMA --------
+// ====== ALARMA ======
 let falla = true;
-function actualizarAlarma() {
-  document.getElementById("alarm")
-    .classList.toggle("alarm-active", falla);
+function actualizarAlarma(){
+  document.getElementById("alarm").classList.toggle("active", falla);
 }
 actualizarAlarma();
 
-// -------- AGUJAS --------
-function setNeedle(id, valor, min=180, max=250) {
-  let angulo = (valor - min) / (max - min) * 180 - 90;
-  document.getElementById(id).style.transform =
-    `rotate(${angulo}deg)`;
+// ====== UTILIDADES DE GAUGE ======
+function degToRad(d){ return d*Math.PI/180; }
+function polar(cx, cy, r, deg){
+  return {
+    x: cx + r * Math.cos(degToRad(deg)),
+    y: cy + r * Math.sin(degToRad(deg))
+  };
 }
 
-// -------- GRÁFICO --------
-let chart = new Chart(document.getElementById("chart"), {
-  type: 'line',
-  data: {
-    labels: [],
-    datasets: [{
-      label: 'L1',
-      data: [],
-      borderColor: 'cyan'
-    }]
-  },
-  options: { responsive: true }
-});
+// Genera divisiones (ticks) de -90° a +90°
+function crearTicks(svgGroupId, min, max, majorStep, minorStep){
+  const g = document.getElementById(svgGroupId);
+  const cx=100, cy=100, r1=82, r2=90;
 
-// -------- REFRESCO COMPLETO --------
-function refrescarGrafico() {
+  function drawTick(val, isMajor){
+    const ratio = (val - min) / (max - min);
+    const ang = -90 + ratio*180;
+    const p1 = polar(cx, cy, r1, ang);
+    const p2 = polar(cx, cy, r2, ang);
+    const line = document.createElementNS("http://www.w3.org/2000/svg","line");
+    line.setAttribute("x1", p1.x); line.setAttribute("y1", p1.y);
+    line.setAttribute("x2", p2.x); line.setAttribute("y2", p2.y);
+    line.setAttribute("stroke", isMajor ? "#e5e7eb" : "#6b7280");
+    line.setAttribute("stroke-width", isMajor ? "2" : "1");
+    g.appendChild(line);
 
-  let labels = [];
-  let data = [];
-
-  for (let i = 0; i < 20; i++) {
-    labels.push(i);
-    data.push(220 + Math.random()*5);
+    if(isMajor){
+      const pText = polar(cx, cy, r1-14, ang);
+      const t = document.createElementNS("http://www.w3.org/2000/svg","text");
+      t.setAttribute("x", pText.x);
+      t.setAttribute("y", pText.y+4);
+      t.setAttribute("fill", "#9ca3af");
+      t.setAttribute("font-size", "10");
+      t.setAttribute("text-anchor", "middle");
+      t.textContent = Math.round(val);
+      g.appendChild(t);
+    }
   }
 
+  for(let v=min; v<=max; v+=minorStep){
+    const isMajor = (Math.round((v-min)/majorStep) === (v-min)/majorStep);
+    drawTick(v, isMajor);
+  }
+}
+
+// Set aguja con animación suave
+function setNeedle(id, valor, min, max){
+  const ratio = (valor - min) / (max - min);
+  const ang = -90 + ratio*180;
+  const el = document.getElementById(id);
+  el.style.transition = "transform 0.6s ease-out";
+  el.style.transform = `rotate(${ang}deg)`;
+}
+
+// ====== CONFIGURACIÓN ======
+// Tensiones típicas 180–250 V
+const VMIN=180, VMAX=250;
+// Corrientes ejemplo 0–100 A (ajustá a tu caso real)
+const IMIN=0, IMAX=100;
+
+// Crear ticks una vez
+["ticksV1","ticksV2","ticksV3"].forEach(id => crearTicks(id, VMIN, VMAX, 10, 5));
+["ticksI1","ticksI2","ticksI3"].forEach(id => crearTicks(id, IMIN, IMAX, 20, 10));
+
+// ====== CHART (refresco por ventana) ======
+const chart = new Chart(document.getElementById("chart"), {
+  type:'line',
+  data:{ labels:[], datasets:[{label:'L1', data:[], borderColor:'#22c55e'}]},
+  options:{ responsive:true, animation:false }
+});
+
+// Reemplaza TODO el dataset cada N segundos
+function refrescarGrafico(){
+  const labels=[], data=[];
+  for(let i=0;i<24;i++){
+    labels.push(i);
+    data.push(220 + Math.random()*6);
+  }
   chart.data.labels = labels;
   chart.data.datasets[0].data = data;
   chart.update();
 }
-
-// -------- SIMULACIÓN --------
-setInterval(() => {
-
-  let v1 = 220 + Math.random()*5;
-  let v2 = 220 + Math.random()*5;
-  let v3 = 220 + Math.random()*5;
-
-  document.getElementById("v1").innerText = v1.toFixed(0);
-  document.getElementById("v2").innerText = v2.toFixed(0);
-  document.getElementById("v3").innerText = v3.toFixed(0);
-
-  setNeedle("n1", v1);
-  setNeedle("n2", v2);
-  setNeedle("n3", v3);
-
-}, 2000);
-
-// refresco cada 10 segundos
-setInterval(refrescarGrafico, 10000);
+setInterval(refrescarGrafico, 12000);
 refrescarGrafico();
 
+// ====== SIMULACIÓN (reemplazar por datos reales luego) ======
+function rnd(a,b){ return a + Math.random()*(b-a); }
+
+setInterval(()=>{
+  // Tensiones
+  const v1=rnd(218,235), v2=rnd(217,236), v3=rnd(219,234);
+  document.getElementById("valV1").textContent = v1.toFixed(0)+" V";
+  document.getElementById("valV2").textContent = v2.toFixed(0)+" V";
+  document.getElementById("valV3").textContent = v3.toFixed(0)+" V";
+  setNeedle("needleV1", v1, VMIN, VMAX);
+  setNeedle("needleV2", v2, VMIN, VMAX);
+  setNeedle("needleV3", v3, VMIN, VMAX);
+
+  // Corrientes
+  const i1=rnd(10,40), i2=rnd(12,45), i3=rnd(8,38);
+  document.getElementById("valI1").textContent = i1.toFixed(1)+" A";
+  document.getElementById("valI2").textContent = i2.toFixed(1)+" A";
+  document.getElementById("valI3").textContent = i3.toFixed(1)+" A";
+  setNeedle("needleI1", i1, IMIN, IMAX);
+  setNeedle("needleI2", i2, IMIN, IMAX);
+  setNeedle("needleI3", i3, IMIN, IMAX);
+
+}, 2000);
 </script></body>
 </html>
