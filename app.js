@@ -40,7 +40,7 @@ class Gauge {
     const h = this.canvas.clientHeight;
 
     const cx = w / 2;
-    const cy = h * 0.9;
+    const cy = h * 0.8;
     const r = Math.min(w, h) * 0.45;
 
     ctx.clearRect(0, 0, w, h);
@@ -51,7 +51,7 @@ class Gauge {
       const end = Math.PI * (1 - z.to / this.max);
 
       ctx.beginPath();
-      ctx.arc(cx, cy, r, start, end, true);
+      ctx.arc(cx, cy, r, Math.PI, 0, false);
       ctx.strokeStyle = z.color;
       ctx.lineWidth = 6;
       ctx.stroke();
