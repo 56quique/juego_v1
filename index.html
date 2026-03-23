@@ -2,10 +2,10 @@
 <head>
 <meta charset="UTF-8">
 <title>ATS - Panel SCADA</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- Chart.js --><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><style>
 body {
   margin: 0;
-  font-family: "Segoe UI", Arial;
+  font-family: Arial;
   background: #0b1220;
   color: #e5e7eb;
 }
@@ -13,11 +13,9 @@ body {
 .header {
   text-align: center;
   padding: 15px;
-  font-size: 20px;
   color: #38bdf8;
 }
 
-/* GRID */
 .container {
   display: grid;
   grid-template-columns: 1fr;
@@ -29,7 +27,6 @@ body {
   .container { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* CARD */
 .card {
   background: #111827;
   padding: 15px;
@@ -39,31 +36,45 @@ body {
 
 /* GAUGE */
 .gauge {
+  position: relative;
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: conic-gradient(#22c55e 0deg, #1f2937 0deg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: #1f2937;
   margin: 10px auto;
 }
 
-.gauge span {
-  font-size: 18px;
-  font-weight: bold;
+.needle {
+  position: absolute;
+  width: 2px;
+  height: 50px;
+  background: red;
+  top: 10px;
+  left: 50%;
+  transform-origin: bottom center;
+  transform: rotate(-90deg);
 }
 
-/* MEDICIONES */
-.measure {
-  display: flex;
-  justify-content: space-between;
-  margin: 4px 0;
+.center-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: white;
+  border-radius: 50%;
+  top: 55px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .value {
-  color: #38bdf8;
+  margin-top: 5px;
   font-weight: bold;
+  color: #38bdf8;
+}
+
+.gauge-container {
+  display: flex;
+  justify-content: space-around;
 }
 
 /* ALARMA */
@@ -78,33 +89,39 @@ body {
   background: #7f1d1d;
   color: #fecaca;
 }
-</style></head><body><div class="header">⚡ ATS - Monitoreo</div><div class="container">  <!-- ALARMA -->  <div class="card">
+</style></head><body><div class="header">⚡ ATS - Panel</div><div class="container">  <!-- ALARMA -->  <div class="card">
     <h3>Alarmas</h3>
     <div id="alarm" class="alarm-box">Falla de arranque</div>
-  </div>  <!-- TENSIÓN RED -->  <div class="card">
+  </div>  <!-- GAUGES -->  <div class="card">
     <h3>Tensión Red</h3>
-    <div class="gauge" id="gaugeR"><span id="vRed">220 V</span></div>
-    <div class="measure">L1 <span id="r1" class="value"></span></div>
-    <div class="measure">L2 <span id="r2" class="value"></span></div>
-    <div class="measure">L3 <span id="r3" class="value"></span></div>
-  </div>  <!-- TENSIÓN GRUPO -->  <div class="card">
-    <h3>Tensión Grupo</h3>
-    <div class="gauge" id="gaugeG"><span id="vGrupo">0 V</span></div>
-    <div class="measure">L1 <span id="g1" class="value"></span></div>
-    <div class="measure">L2 <span id="g2" class="value"></span></div>
-    <div class="measure">L3 <span id="g3" class="value"></span></div>
-  </div>  <!-- CORRIENTE RED -->  <div class="card">
-    <h3>Corriente Red (A)</h3>
-    <div class="measure">L1 <span id="ir1" class="value"></span></div>
-    <div class="measure">L2 <span id="ir2" class="value"></span></div>
-    <div class="measure">L3 <span id="ir3" class="value"></span></div>
-  </div>  <!-- CORRIENTE GRUPO -->  <div class="card">
-    <h3>Corriente Grupo (A)</h3>
-    <div class="measure">L1 <span id="ig1" class="value"></span></div>
-    <div class="measure">L2 <span id="ig2" class="value"></span></div>
-    <div class="measure">L3 <span id="ig3" class="value"></span></div>
+    <div class="gauge-container">  <div>
+    <div class="gauge">
+      <div class="needle" id="n1"></div>
+      <div class="center-dot"></div>
+    </div>
+    <div class="value" id="v1">220</div>
+  </div>
+
+  <div>
+    <div class="gauge">
+      <div class="needle" id="n2"></div>
+      <div class="center-dot"></div>
+    </div>
+    <div class="value" id="v2">220</div>
+  </div>
+
+  <div>
+    <div class="gauge">
+      <div class="needle" id="n3"></div>
+      <div class="center-dot"></div>
+    </div>
+    <div class="value" id="v3">220</div>
+  </div>
+
+</div>
+
   </div>  <!-- GRÁFICO -->  <div class="card" style="grid-column: span 2;">
-    <h3>Tensión Red - Histórico</h3>
+    <h3>Histórico</h3>
     <canvas id="chart"></canvas>
   </div></div><script>
 
@@ -116,29 +133,42 @@ function actualizarAlarma() {
 }
 actualizarAlarma();
 
-// -------- GAUGE --------
-function actualizarGauge(id, valor, max=250) {
-  let porcentaje = (valor / max) * 180;
-  document.getElementById(id).style.background =
-    `conic-gradient(#22c55e ${porcentaje}deg, #1f2937 ${porcentaje}deg)`;
+// -------- AGUJAS --------
+function setNeedle(id, valor, min=180, max=250) {
+  let angulo = (valor - min) / (max - min) * 180 - 90;
+  document.getElementById(id).style.transform =
+    `rotate(${angulo}deg)`;
 }
 
 // -------- GRÁFICO --------
-let data = [];
-let labels = [];
-
-const chart = new Chart(document.getElementById("chart"), {
+let chart = new Chart(document.getElementById("chart"), {
   type: 'line',
   data: {
-    labels,
+    labels: [],
     datasets: [{
       label: 'L1',
-      data,
+      data: [],
       borderColor: 'cyan'
     }]
   },
   options: { responsive: true }
 });
+
+// -------- REFRESCO COMPLETO --------
+function refrescarGrafico() {
+
+  let labels = [];
+  let data = [];
+
+  for (let i = 0; i < 20; i++) {
+    labels.push(i);
+    data.push(220 + Math.random()*5);
+  }
+
+  chart.data.labels = labels;
+  chart.data.datasets[0].data = data;
+  chart.update();
+}
 
 // -------- SIMULACIÓN --------
 setInterval(() => {
@@ -147,36 +177,19 @@ setInterval(() => {
   let v2 = 220 + Math.random()*5;
   let v3 = 220 + Math.random()*5;
 
-  let i1 = 10 + Math.random()*5;
-  let i2 = 12 + Math.random()*5;
-  let i3 = 11 + Math.random()*5;
+  document.getElementById("v1").innerText = v1.toFixed(0);
+  document.getElementById("v2").innerText = v2.toFixed(0);
+  document.getElementById("v3").innerText = v3.toFixed(0);
 
-  // tensiones
-  r1.innerText = v1.toFixed(0);
-  r2.innerText = v2.toFixed(0);
-  r3.innerText = v3.toFixed(0);
-
-  // corrientes
-  ir1.innerText = i1.toFixed(1);
-  ir2.innerText = i2.toFixed(1);
-  ir3.innerText = i3.toFixed(1);
-
-  // gauge promedio
-  let prom = (v1+v2+v3)/3;
-  vRed.innerText = prom.toFixed(0) + " V";
-  actualizarGauge("gaugeR", prom);
-
-  // gráfico
-  if (data.length > 20) {
-    data.shift();
-    labels.shift();
-  }
-
-  data.push(v1);
-  labels.push("");
-  chart.update();
+  setNeedle("n1", v1);
+  setNeedle("n2", v2);
+  setNeedle("n3", v3);
 
 }, 2000);
+
+// refresco cada 10 segundos
+setInterval(refrescarGrafico, 10000);
+refrescarGrafico();
 
 </script></body>
 </html>
