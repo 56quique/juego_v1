@@ -1,71 +1,242 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0f172a;
-  color: #e5e7eb;
+// =======================
+// GAUGE PRO
+// =======================
+
+class Gauge {
+  constructor(canvas, max, zones) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext("2d");
+    this.max = max;
+    this.zones = zones;
+
+    this.value = 0;
+    this.target = 0;
+
+    this.resize();
+    window.addEventListener("resize", () => this.resize());
+  }
+
+  resize() {
+    const dpr = window.devicePixelRatio || 1;
+
+    this.canvas.width = this.canvas.clientWidth * dpr;
+    this.canvas.height = this.canvas.clientHeight * dpr;
+
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+    this.ctx.scale(dpr, dpr);
+  }
+
+  update(value) {
+    this.target = Math.max(0, Math.min(this.max, value));
+  }
+
+  draw() {
+    // inercia
+    this.value += (this.target - this.value) * 0.08;
+
+    const ctx = this.ctx;
+    const w = this.canvas.clientWidth;
+    const h = this.canvas.clientHeight;
+
+    const cx = w / 2;
+    const cy = h * 0.85;
+    const r = Math.min(w, h) * 0.45;
+
+    ctx.clearRect(0, 0, w, h);
+
+    // =====================
+    // ZONAS
+    // =====================
+    this.zones.forEach(zone => {
+      const start = Math.PI * (1 - zone.from / this.max);
+      const end = Math.PI * (1 - zone.to / this.max);
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, start, end, true);
+      ctx.strokeStyle = zone.color;
+      ctx.lineWidth = 10;
+      ctx.stroke();
+    });
+
+    // =====================
+    // ESCALA
+    // =====================
+    const steps = 10;
+    for (let i = 0; i <= steps; i++) {
+      const value = (this.max / steps) * i;
+      const angle = Math.PI * (1 - value / this.max);
+
+      const x1 = cx + Math.cos(angle) * (r - 10);
+      const y1 = cy + Math.sin(angle) * (r - 10);
+
+      const x2 = cx + Math.cos(angle) * r;
+      const y2 = cy + Math.sin(angle) * r;
+
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.strokeStyle = "#e5e7eb";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // números
+      const tx = cx + Math.cos(angle) * (r - 25);
+      const ty = cy + Math.sin(angle) * (r - 25);
+
+      ctx.fillStyle = "#e5e7eb";
+      ctx.font = "12px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText(Math.round(value), tx, ty);
+    }
+
+    // =====================
+    // AGUJA
+    // =====================
+    const angle = Math.PI * (1 - this.value / this.max);
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(angle);
+
+    ctx.beginPath();
+    ctx.moveTo(-5, 0);
+    ctx.lineTo(r * 0.75, 0);
+    ctx.strokeStyle = "#ef4444";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    ctx.restore();
+
+    // centro
+    ctx.beginPath();
+    ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+    ctx.fillStyle = "#000";
+    ctx.fill();
+
+    // valor numérico
+    ctx.fillStyle = "#e5e7eb";
+    ctx.font = "bold 16px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(this.value.toFixed(0), cx, cy - r * 0.3);
+  }
 }
 
-header {
-  text-align: center;
-  padding: 10px;
-  background: #020617;
-  border-bottom: 2px solid #1e293b;
+// =======================
+// CONFIGURACIÓN DE ZONAS
+// =======================
+
+// TENSIÓN
+const voltZones = [
+  { from: 0, to: 210, color: "#ef4444" },
+  { from: 210, to: 240, color: "#22c55e" },
+  { from: 240, to: 300, color: "#ef4444" }
+];
+
+// CORRIENTE
+const ampZones = [
+  { from: 0, to: 120, color: "#22c55e" },
+  { from: 120, to: 140, color: "#f59e0b" },
+  { from: 140, to: 150, color: "#ef4444" }
+];
+
+// =======================
+// INSTANCIAS
+// =======================
+
+const gVoltRed = new Gauge(document.getElementById("gaugeVoltRed"), 300, voltZones);
+const gAmpRed = new Gauge(document.getElementById("gaugeAmpRed"), 150, ampZones);
+
+const gVoltGen = new Gauge(document.getElementById("gaugeVoltGen"), 300, voltZones);
+const gAmpGen = new Gauge(document.getElementById("gaugeAmpGen"), 150, ampZones);
+
+// =======================
+// SIMULACIÓN
+// =======================
+
+let state = "RED";
+let timer = 0;
+
+function getData() {
+  timer += 0.02;
+
+  const redOK = Math.sin(timer) > -0.3;
+
+  if (!redOK) {
+    state = "FALLA";
+  } else {
+    state = "RED";
+  }
+
+  return {
+    red: {
+      v: redOK ? 220 + Math.random() * 10 : 0,
+      a: redOK ? 60 + Math.random() * 10 : 0,
+      kw: redOK ? 12 : 0,
+      fp: redOK ? 0.92 : 0
+    },
+    gen: {
+      v: !redOK ? 230 : 0,
+      a: !redOK ? 50 : 0,
+      kw: !redOK ? 9 : 0,
+      fp: !redOK ? 0.95 : 0
+    },
+    state
+  };
 }
 
-main {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  padding: 10px;
+// =======================
+// UI
+// =======================
+
+function updateUI(data) {
+
+  // gauges
+  gVoltRed.update(data.red.v);
+  gAmpRed.update(data.red.a);
+
+  gVoltGen.update(data.gen.v);
+  gAmpGen.update(data.gen.a);
+
+  // valores
+  document.getElementById("kwRed").innerText = data.red.kw.toFixed(1);
+  document.getElementById("fpRed").innerText = data.red.fp.toFixed(2);
+
+  document.getElementById("kwGen").innerText = data.gen.kw.toFixed(1);
+  document.getElementById("fpGen").innerText = data.gen.fp.toFixed(2);
+
+  // estados
+  document.querySelectorAll(".state").forEach(e => {
+    e.classList.remove("active", "alarm", "warning");
+  });
+
+  if (data.state === "RED") {
+    document.getElementById("stateRed").classList.add("active");
+  }
+
+  if (data.state === "FALLA") {
+    document.getElementById("stateFail").classList.add("alarm");
+  }
 }
 
-.panel {
-  background: #1e293b;
-  padding: 10px;
-  border-radius: 10px;
-  text-align: center;
+// =======================
+// LOOP PRINCIPAL
+// =======================
+
+function loop() {
+  const data = getData();
+
+  updateUI(data);
+
+  // dibujar gauges
+  gVoltRed.draw();
+  gAmpRed.draw();
+  gVoltGen.draw();
+  gAmpGen.draw();
+
+  requestAnimationFrame(loop);
 }
 
-canvas {
-  width: 100%;
-  height: 150px;
-}
-
-.values {
-  margin-top: 10px;
-  font-size: 18px;
-}
-
-.transfer {
-  grid-column: span 2;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px;
-  background: #1e293b;
-  border-radius: 10px;
-}
-
-.state {
-  padding: 10px 20px;
-  border-radius: 5px;
-  background: #334155;
-}
-
-.active {
-  background: #22c55e;
-}
-
-.warning {
-  background: #f59e0b;
-}
-
-.alarm {
-  background: #ef4444;
-}
-
-.history {
-  grid-column: span 2;
-  background: #1e293b;
-  padding: 10px;
-  border-radius: 10px;
-}
+// ARRANQUE
+window.onload = () => {
+  loop();
+};
