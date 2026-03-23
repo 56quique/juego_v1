@@ -8,139 +8,87 @@
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="header">
   <h1>SCADA - Transferencia Automática</h1>
 </header>
 
-<!-- CONTENIDO PRINCIPAL -->
 <main class="main">
 
-  <!-- ===================== -->
-  <!-- PANEL RED -->
-  <!-- ===================== -->
+  <!-- RED -->
   <section class="panel">
     <h2 class="panel-title">RED</h2>
 
-    <!-- TENSIONES -->
+    <!-- TENSION -->
     <div class="block">
       <h3>Tensión (V)</h3>
       <div class="grid-3">
-        <div class="gauge">
-  <canvas id="vRedL1"></canvas>
-  <span>L1</span>
-</div>
-<div class="gauge">
-  <canvas id="vRedL2"></canvas>
-  <span>L2</span>
-</div>
- <div class="gauge">
-  <canvas id="vRedL3"></canvas>
-  <span>L3</span>
-</div>
-
+        <div class="gauge"><canvas id="vRedL1"></canvas><span>L1</span></div>
+        <div class="gauge"><canvas id="vRedL2"></canvas><span>L2</span></div>
+        <div class="gauge"><canvas id="vRedL3"></canvas><span>L3</span></div>
+      </div>
     </div>
 
-    <!-- CORRIENTES -->
+    <!-- CORRIENTE -->
     <div class="block">
       <h3>Corriente (A)</h3>
       <div class="grid-3">
-        <div 
-<div class="gauge">
-  <canvas id="iRedL1"></canvas>
-  <span>L1</span>
-</div>
-<div class="gauge">
-  <canvas id="iRedL2"></canvas>
-  <span>L2</span>
-</div>
-<div class="gauge">
-  <canvas id="iRedL3"></canvas>
-  <span>L3</span>
-</div>
+        <div class="gauge"><canvas id="iRedL1"></canvas><span>L1</span></div>
+        <div class="gauge"><canvas id="iRedL2"></canvas><span>L2</span></div>
+        <div class="gauge"><canvas id="iRedL3"></canvas><span>L3</span></div>
+      </div>
     </div>
 
-    <!-- VALORES -->
     <div class="values">
       <div>Potencia: <span>-- kW</span></div>
       <div>FP: <span>--</span></div>
     </div>
   </section>
 
-  <!-- ===================== -->
-  <!-- PANEL GENERADOR -->
-  <!-- ===================== -->
+  <!-- GENERADOR -->
   <section class="panel">
     <h2 class="panel-title">GENERADOR</h2>
 
-    <!-- TENSIONES -->
+    <!-- TENSION -->
     <div class="block">
       <h3>Tensión (V)</h3>
       <div class="grid-3">
-        <div 
-
-<div class="gauge">
-  <canvas id="vGenL1"></canvas>
-  <span>L1</span>
-</div>
-<div class="gauge">
-  <canvas id="vGenL2"></canvas>
-  <span>L1</span>
-</div>
- <div class="gauge">
-  <canvas id="vGenL3"></canvas>
-  <span>L1</span>
-</div>
-
-<div class="gauge">
-  <canvas id="iGenL1"></canvas>
-  <span>L1</span>
-</div>
-<div class="gauge">
-  <canvas id="iGenL2"></canvas>
-  <span>L1</span>
-</div>
-<div class="gauge">
-  <canvas id="iGenL3"></canvas>
-  <span>L1</span>
-</div>
+        <div class="gauge"><canvas id="vGenL1"></canvas><span>L1</span></div>
+        <div class="gauge"><canvas id="vGenL2"></canvas><span>L2</span></div>
+        <div class="gauge"><canvas id="vGenL3"></canvas><span>L3</span></div>
+      </div>
     </div>
 
-    <!-- CORRIENTES -->
+    <!-- CORRIENTE -->
     <div class="block">
       <h3>Corriente (A)</h3>
       <div class="grid-3">
-        <div 
-
-
-
+        <div class="gauge"><canvas id="iGenL1"></canvas><span>L1</span></div>
+        <div class="gauge"><canvas id="iGenL2"></canvas><span>L2</span></div>
+        <div class="gauge"><canvas id="iGenL3"></canvas><span>L3</span></div>
+      </div>
     </div>
 
-    <!-- VALORES -->
     <div class="values">
       <div>Potencia: <span>-- kW</span></div>
       <div>FP: <span>--</span></div>
     </div>
   </section>
 
-  <!-- ===================== -->
-  <!-- ESTADO DE TRANSFERENCIA -->
-  <!-- ===================== -->
+  <!-- ESTADO -->
   <section class="transfer">
     <div class="state">RED</div>
     <div class="state">FALLA</div>
-    <div class="state">ARRANQUE<div>
+    <div class="state">ARRANQUE</div>
     <div class="state">GRUPO</div>
   </section>
 
-  <!-- ===================== -->
-  <!-- HISTÓRICO -->
-  <!-- ===================== -->
+  <!-- HISTORICO -->
   <section class="history">
     <div class="placeholder big">Gráfico histórico</div>
   </section>
 
 </main>
-<script src="auto.js"></script>
+
+<script src="app.js"></script>
 </body>
 </html>
