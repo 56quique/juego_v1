@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
     freq: document.getElementById("freq")
   };
 
-  // Actualiza la barra vertical de un gauge
   function setGauge(gauge, percent, color = "#0f0") {
     gauge.innerHTML = ''; // limpiar contenido
     const fill = document.createElement('div');
