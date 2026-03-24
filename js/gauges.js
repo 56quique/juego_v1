@@ -8,34 +8,28 @@ export function crearGauge(id, min, max, config = {}) {
 
   const ctx = canvas.getContext("2d");
 
-  // =========================
-  // CONFIGURACIÓN
-  // =========================
   const unidad = config.unidad || "";
   const label = config.label || "";
   const inercia = config.inercia || 0.08;
   let zonas = config.zonas;
 
   if (!zonas || zonas.length === 0) {
-    // Zona por defecto
     zonas = [{ from: min, to: max, color: "#00ff00" }];
   }
+
+  let valorActual = 0;
+  let valorObjetivo = 0;
 
   function resize() {
     const width = canvas.parentElement.offsetWidth || 200;
     canvas.width = width;
     canvas.height = width / 2;
+    dibujar(valorActual); // fuerza el redraw después del resize
   }
 
-  resize();
   window.addEventListener("resize", resize);
+  resize();
 
-  let valorActual = 0;
-  let valorObjetivo = 0;
-
-  // =========================
-  // DIBUJAR ZONAS
-  // =========================
   function dibujarZona(w, h, inicio, fin, color) {
     const angInicio = Math.PI + ((inicio - min) / (max - min)) * Math.PI;
     const angFin = Math.PI + ((fin - min) / (max - min)) * Math.PI;
@@ -47,24 +41,19 @@ export function crearGauge(id, min, max, config = {}) {
     ctx.stroke();
   }
 
-  // =========================
-  // DIBUJAR TICKS
-  // =========================
   function dibujarTicks(w, h) {
     const cx = w / 2;
     const cy = h;
     const radio = w / 2 - 10;
-
     const rango = max - min;
     const tickMenor = rango <= 100 ? 5 : 10;
     const tickMayor = rango <= 100 ? 25 : 50;
 
     for (let v = min; v <= max; v += tickMenor) {
       const ang = Math.PI + ((v - min) / (max - min)) * Math.PI;
-
       const esMayor = v % tickMayor === 0;
-      let largo = esMayor ? 14 : 8;
-      let grosor = esMayor ? 3 : 1.5;
+      const largo = esMayor ? 14 : 8;
+      const grosor = esMayor ? 3 : 1.5;
 
       const x1 = cx + Math.cos(ang) * (radio - largo);
       const y1 = cy + Math.sin(ang) * (radio - largo);
@@ -89,21 +78,13 @@ export function crearGauge(id, min, max, config = {}) {
     }
   }
 
-  // =========================
-  // COLOR DINÁMICO AGUJA
-  // =========================
   function colorPorValor(valor) {
     for (let z of zonas) {
-      if (valor >= z.from && valor <= z.to) {
-        return z.color;
-      }
+      if (valor >= z.from && valor <= z.to) return z.color;
     }
-    return "#ffcc00"; // color por defecto
+    return "#ffcc00";
   }
 
-  // =========================
-  // DIBUJO PRINCIPAL
-  // =========================
   function dibujar(valor) {
     const w = canvas.width;
     const h = canvas.height;
@@ -111,16 +92,13 @@ export function crearGauge(id, min, max, config = {}) {
 
     ctx.clearRect(0, 0, w, h);
 
-    // dibujar zonas
     zonas.forEach(z => dibujarZona(w, h, z.from, z.to, z.color));
-
-    // dibujar ticks
     dibujarTicks(w, h);
 
     const cx = w / 2;
     const cy = h;
 
-    // TEXTO
+    // Texto
     ctx.fillStyle = "#fff";
     ctx.font = `bold ${Math.round(w * 0.12)}px Arial`;
     ctx.textAlign = "center";
@@ -130,7 +108,7 @@ export function crearGauge(id, min, max, config = {}) {
     ctx.font = `bold ${Math.round(w * 0.08)}px Arial`;
     ctx.fillText(label, cx, h - Math.round(w * 0.12 + 10));
 
-    // AGUJA
+    // Aguja
     const angulo = Math.PI + ((valor - min) / (max - min)) * Math.PI;
     const radio = w / 2 - 20;
     const x = cx + Math.cos(angulo) * radio;
@@ -144,16 +122,13 @@ export function crearGauge(id, min, max, config = {}) {
     ctx.lineCap = "round";
     ctx.stroke();
 
-    // CENTRO
+    // Centro
     ctx.beginPath();
     ctx.arc(cx, cy, Math.max(4, w * 0.02), 0, Math.PI * 2);
     ctx.fillStyle = "#ccc";
     ctx.fill();
   }
 
-  // =========================
-  // INERCIA
-  // =========================
   function actualizar() {
     valorActual += (valorObjetivo - valorActual) * inercia;
     dibujar(valorActual);
