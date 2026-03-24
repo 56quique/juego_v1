@@ -1,66 +1,94 @@
-.scada-container {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  width: auto;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.card {
-  background-color: #333;
-  border-radius: 15px;
+body {
+  background-color: #222;
+  font-family: Arial, sans-serif;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 800px;
 }
 
-/* Contenedor principal de gauges horizontal */
-.gauges-container {
-  display: flex;
-  gap: 50px; /* espacio entre columna tensión y columna corriente */
-  margin-bottom: 20px;
+/* TARJETA */
+.card {
+  background: #333;
+  border-radius: 15px;
+  padding: 25px;
+  width: fit-content;
+  box-shadow: 0 0 20px rgba(0,0,0,0.6);
 }
 
-/* Columnas verticales */
-.column {
+/* FILAS */
+.row {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-/* Corriente en fila horizontal */
-.corriente-row {
-  display: flex;
-  gap: 15px;
-}
-
-/* Frecuencia debajo de corriente */
-.frecuencia-row {
-  display: flex;
+  gap: 20px;
   justify-content: center;
-  margin-top: 15px;
+  margin-bottom: 25px;
 }
 
-/* Imagen generador */
+/* =========================
+   GAUGE VERTICAL
+========================= */
+.gauge-v {
+  width: 40px;
+  height: 180px;
+  background: #555;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* =========================
+   GAUGE HORIZONTAL
+========================= */
+.gauge-h {
+  width: 200px;
+  height: 30px;
+  background: #555;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* BARRA INTERNA */
+.fill {
+  position: absolute;
+  background: #0f0;
+  transition: all 0.3s;
+}
+
+/* Vertical */
+.gauge-v .fill {
+  bottom: 0;
+  width: 100%;
+  height: 0%;
+}
+
+/* Horizontal */
+.gauge-h .fill {
+  left: 0;
+  height: 100%;
+  width: 0%;
+}
+
+/* TEXTO */
+span {
+  position: absolute;
+  bottom: -20px;
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-size: 12px;
+}
+
+/* IMAGEN */
 .generador-wrapper {
   display: flex;
   justify-content: center;
-  align-items: flex-end;
 }
 
 .generador-img {
-  width: 100%;
   max-width: 400px;
-  height: auto;
-}
-
-/* Gauges verticales */
-.gauge-vertical {
-  width: 30px;
-  height: 150px;
-  background-color: #555;
-  border-radius: 5px;
-  overflow: hidden;
-  position: relative;
+  width: 100%;
 }
