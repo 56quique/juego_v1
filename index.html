@@ -8,15 +8,32 @@
 </head>
 <body>
 
-  <div class="scada-container">
-    <div class="card">
+<div class="scada-container">
+  <div class="card">
+    
+    <!-- Gauges verticales arriba y a los lados -->
+    <div class="gauges-left">
+      <div class="gauge-vertical" id="vL1"></div>
+      <div class="gauge-vertical" id="vL2"></div>
+      <div class="gauge-vertical" id="vL3"></div>
+    </div>
+
+    <div class="generador-wrapper">
       <img src="img/grupo_electrogeno-removebg-preview.png" 
            alt="Grupo Electrógeno" 
            class="generador-img" id="generador">
-      <!-- Aquí luego podemos agregar gauges usando position:absolute -->
     </div>
-  </div>
 
-  <script type="module" src="js/main.js"></script>
+    <div class="gauges-right">
+      <div class="gauge-vertical" id="iL1"></div>
+      <div class="gauge-vertical" id="iL2"></div>
+      <div class="gauge-vertical" id="iL3"></div>
+      <div class="gauge-vertical" id="freq"></div> <!-- Frecuencímetro -->
+    </div>
+
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
 </body>
 </html>
