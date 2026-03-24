@@ -28,12 +28,20 @@ body, html {
   position: relative;
   background-color: #333;
   border-radius: 15px;
-  padding: 60px 20px 20px 20px; /* top, right, bottom, left */
+  padding: 40px 20px 20px 20px; /* top, right, bottom, left */
   box-shadow: 0 0 20px rgba(0,0,0,0.6);
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  max-width: 900px;
+  flex-direction: column; /* apilar gauges verticalmente */
+  align-items: center;
+  max-width: 600px;
+}
+
+/* Filas de gauges */
+.gauges-row {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
 /* Imagen del generador */
@@ -51,13 +59,6 @@ body, html {
 }
 
 /* Gauges verticales */
-.gauges-left,
-.gauges-right {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
 .gauge-vertical {
   width: 30px;
   height: 150px;
@@ -77,4 +78,5 @@ body, html {
   height: 0%; /* se actualiza dinámicamente */
   background-color: #0f0;
   transition: height 0.2s ease;
+  border-radius: 5px;
 }
