@@ -139,10 +139,10 @@ function variar(base, min, max, paso = 0.8) {
 setInterval(() => {
 
   // RED (tensión más estable)
-  valores.vRed = valores.vRed.map(v => variar(v, 200, 230, 1));
+  valores.vRed = valores.vRed.map(v => variar(v, 200, 230, 3));
 
   // RED (corriente más variable)
-  valores.iRed = valores.iRed.map(i => variar(i, 40, 120, 3));
+  valores.iRed = valores.iRed.map(i => variar(i, 40, 120, 5));
 
   // ACTUALIZAR GAUGES RED
   gauges[0]?.update(valores.vRed[0]);
