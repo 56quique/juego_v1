@@ -1,34 +1,40 @@
-<div class="scada-container">
-  <div class="card">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>SCADA - Grupo Electrógeno</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-    <!-- Contenedor horizontal -->
-    <div class="gauges-container">
-      <!-- Columna Tensión -->
-      <div class="column">
-        <div class="gauge-vertical" id="vL1"></div>
-        <div class="gauge-vertical" id="vL2"></div>
-        <div class="gauge-vertical" id="vL3"></div>
-      </div>
+<div class="card">
 
-      <!-- Columna Corriente + Frecuencia -->
-      <div class="column">
-        <div class="corriente-row">
-          <div class="gauge-vertical" id="iL1"></div>
-          <div class="gauge-vertical" id="iL2"></div>
-          <div class="gauge-vertical" id="iL3"></div>
-        </div>
-        <div class="frecuencia-row">
-          <div class="gauge-vertical" id="freq"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Imagen del generador debajo -->
-    <div class="generador-wrapper">
-      <img src="img/grupo_electrogeno-removebg-preview.png" 
-           alt="Grupo Electrógeno" 
-           class="generador-img" id="generador">
-    </div>
-
+  <!-- TENSIÓN -->
+  <div class="row">
+    <div class="gauge-v" id="vL1"><span>L1</span></div>
+    <div class="gauge-v" id="vL2"><span>L2</span></div>
+    <div class="gauge-v" id="vL3"><span>L3</span></div>
   </div>
+
+  <!-- CORRIENTE -->
+  <div class="row">
+    <div class="gauge-v" id="iL1"><span>L1</span></div>
+    <div class="gauge-v" id="iL2"><span>L2</span></div>
+    <div class="gauge-v" id="iL3"><span>L3</span></div>
+  </div>
+
+  <!-- FRECUENCIA (horizontal) -->
+  <div class="row">
+    <div class="gauge-h" id="freq"><span>Hz</span></div>
+  </div>
+
+  <!-- IMAGEN -->
+  <div class="generador-wrapper">
+    <img src="img/grupo_electrogeno-removebg-preview.png" class="generador-img">
+  </div>
+
 </div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
