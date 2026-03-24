@@ -1,9 +1,15 @@
 export function crearGauge(id, min, max) {
   const canvas = document.getElementById(id)
+
+  if (!canvas) {
+    console.error("Canvas no encontrado:", id)
+    return
+  }
+
   const ctx = canvas.getContext("2d")
 
   function resize() {
-    const width = canvas.parentElement.offsetWidth
+    const width = canvas.parentElement.offsetWidth || 200
     canvas.width = width
     canvas.height = width / 2
   }
@@ -62,6 +68,8 @@ export function crearGauge(id, min, max) {
     const w = canvas.width
     const h = canvas.height
 
+    if (w === 0 || h === 0) return
+
     ctx.clearRect(0, 0, w, h)
 
     // zonas
@@ -72,7 +80,7 @@ export function crearGauge(id, min, max) {
     // ticks
     dibujarTicks(w, h)
 
-    // valor numérico
+    // valor
     ctx.fillStyle = "#fff"
     ctx.font = "16px Arial"
     ctx.textAlign = "center"
@@ -81,9 +89,9 @@ export function crearGauge(id, min, max) {
     // aguja
     const angulo = Math.PI + (valor - min) / (max - min) * Math.PI
 
-    const radio = w/2 - 20
     const cx = w/2
     const cy = h
+    const radio = w/2 - 20
 
     const x = cx + Math.cos(angulo) * radio
     const y = cy + Math.sin(angulo) * radio
