@@ -80,12 +80,60 @@ export function crearGauge(id, min, max, label = "") {
   }
 }
   function dibujar(valor) {
-    const w = canvas.width
-    const h = canvas.height
+  const w = canvas.width
+  const h = canvas.height
 
-    if (w === 0 || h === 0) return
+  if (w === 0 || h === 0) return
 
-    ctx.clearRect(0, 0, w, h)
+  ctx.clearRect(0, 0, w, h)
+
+  // zonas
+  dibujarZona(w, h, 0, 210, "#d9534f")
+  dibujarZona(w, h, 210, 240, "#5cb85c")
+  dibujarZona(w, h, 240, 300, "#d9534f")
+
+  // ticks
+  dibujarTicks(w, h)
+
+  const cx = w / 2
+  const cy = h
+
+  // ===== TEXTO ESCALADO =====
+  const fontGrande = Math.round(w * 0.12)
+  const fontChica = Math.round(w * 0.08)
+
+  // valor principal
+  ctx.fillStyle = "#fff"
+  ctx.font = `bold ${fontGrande}px Arial`
+  ctx.textAlign = "center"
+  ctx.fillText(valor.toFixed(0) + " V", cx, h - 10)
+
+  // etiqueta (L1, L2...)
+  ctx.fillStyle = "#ccc"
+  ctx.font = `bold ${fontChica}px Arial`
+  ctx.fillText(label, cx, h - (fontGrande + 10))
+
+  // ===== AGUJA =====
+  const angulo = Math.PI + (valor - min) / (max - min) * Math.PI
+  const radio = w / 2 - 20
+
+  const x = cx + Math.cos(angulo) * radio
+  const y = cy + Math.sin(angulo) * radio
+
+  ctx.beginPath()
+  ctx.moveTo(cx, cy)
+  ctx.lineTo(x, y)
+  ctx.strokeStyle = "#ffcc00"
+  ctx.lineWidth = Math.max(2, w * 0.02) // escala dinámica
+  ctx.lineCap = "round"
+  ctx.stroke()
+
+  // centro
+  ctx.beginPath()
+  ctx.arc(cx, cy, Math.max(4, w * 0.02), 0, Math.PI * 2)
+  ctx.fillStyle = "#ccc"
+  ctx.fill()
+}
 
     // zonas
     dibujarZona(w, h, 0, 210, "#d9534f")
