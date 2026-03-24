@@ -32,38 +32,53 @@ export function crearGauge(id, min, max, label = "") {
   }
 
   function dibujarTicks(w, h) {
-    const cx = w/2
-    const cy = h
-    const radio = w/2 - 10
+  const cx = w/2
+  const cy = h
+  const radio = w/2 - 10
 
-    for (let v = min; v <= max; v += 20) {
-      const ang = Math.PI + (v - min) / (max - min) * Math.PI
+  for (let v = min; v <= max; v += 10) { // ahora cada 10
+    const ang = Math.PI + (v - min) / (max - min) * Math.PI
 
-      const x1 = cx + Math.cos(ang) * (radio - 10)
-      const y1 = cy + Math.sin(ang) * (radio - 10)
+    // definir si es tick mayor o menor
+    const esMayor = (v % 40 === 0)
+    const esMedio = (v % 20 === 0)
 
-      const x2 = cx + Math.cos(ang) * radio
-      const y2 = cy + Math.sin(ang) * radio
+    let largo = 6
+    let grosor = 1
 
-      ctx.beginPath()
-      ctx.moveTo(x1, y1)
-      ctx.lineTo(x2, y2)
-      ctx.strokeStyle = "#aaa"
-      ctx.lineWidth = 2
-      ctx.stroke()
+    if (esMayor) {
+      largo = 14
+      grosor = 3
+    } else if (esMedio) {
+      largo = 10
+      grosor = 2
+    }
 
-      if (v % 40 === 0) {
-        const xt = cx + Math.cos(ang) * (radio - 25)
-        const yt = cy + Math.sin(ang) * (radio - 25)
+    const x1 = cx + Math.cos(ang) * (radio - largo)
+    const y1 = cy + Math.sin(ang) * (radio - largo)
 
-        ctx.fillStyle = "#fff"
-        ctx.font = "12px Arial"
-        ctx.textAlign = "center"
-        ctx.fillText(v, xt, yt)
-      }
+    const x2 = cx + Math.cos(ang) * radio
+    const y2 = cy + Math.sin(ang) * radio
+
+    ctx.beginPath()
+    ctx.moveTo(x1, y1)
+    ctx.lineTo(x2, y2)
+    ctx.strokeStyle = "#aaa"
+    ctx.lineWidth = grosor
+    ctx.stroke()
+
+    // SOLO números en ticks mayores
+    if (esMayor) {
+      const xt = cx + Math.cos(ang) * (radio - 25)
+      const yt = cy + Math.sin(ang) * (radio - 25)
+
+      ctx.fillStyle = "#fff"
+      ctx.font = "12px Arial"
+      ctx.textAlign = "center"
+      ctx.fillText(v, xt, yt)
     }
   }
-
+}
   function dibujar(valor) {
     const w = canvas.width
     const h = canvas.height
