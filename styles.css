@@ -64,12 +64,15 @@ body {
    GAUGE VERTICAL
 ========================= */
 .gauge-v {
-  width: 24px;
-  height: 320px;
-  background: #444;
-  border-radius: 8px;
   position: relative;
   overflow: hidden;
+}
+
+.gauge-v .fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;   /* 🔴 CLAVE */
+  width: 100%;
 }
 
 /* =========================
@@ -89,7 +92,8 @@ body {
 ========================= */
 .fill {
   position: absolute;
-  transition: height 0.25s linear, width 0.25s linear;
+  will-change: height, width;
+  transition: height 0.2s linear, width 0.2s linear;
 }
 
 /* vertical */
