@@ -1,40 +1,74 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>SCADA - Grupo Electrógeno</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-
 <div class="card">
 
   <!-- TENSIÓN -->
   <div class="row">
-    <div class="gauge-v" id="vL1"><span>L1</span></div>
-    <div class="gauge-v" id="vL2"><span>L2</span></div>
-    <div class="gauge-v" id="vL3"><span>L3</span></div>
+    <div class="gauge-container">
+      <div class="scale-v" id="scaleV1"></div>
+      <div>
+        <div class="value" id="val_vL1">0 V</div>
+        <div class="gauge-v" id="vL1"></div>
+      </div>
+    </div>
+
+    <div class="gauge-container">
+      <div class="scale-v" id="scaleV2"></div>
+      <div>
+        <div class="value" id="val_vL2">0 V</div>
+        <div class="gauge-v" id="vL2"></div>
+      </div>
+    </div>
+
+    <div class="gauge-container">
+      <div class="scale-v" id="scaleV3"></div>
+      <div>
+        <div class="value" id="val_vL3">0 V</div>
+        <div class="gauge-v" id="vL3"></div>
+      </div>
+    </div>
   </div>
 
   <!-- CORRIENTE -->
   <div class="row">
-    <div class="gauge-v" id="iL1"><span>L1</span></div>
-    <div class="gauge-v" id="iL2"><span>L2</span></div>
-    <div class="gauge-v" id="iL3"><span>L3</span></div>
+    <div class="gauge-container">
+      <div class="scale-v" id="scaleI1"></div>
+      <div>
+        <div class="value" id="val_iL1">0 A</div>
+        <div class="gauge-v" id="iL1"></div>
+      </div>
+    </div>
+
+    <div class="gauge-container">
+      <div class="scale-v" id="scaleI2"></div>
+      <div>
+        <div class="value" id="val_iL2">0 A</div>
+        <div class="gauge-v" id="iL2"></div>
+      </div>
+    </div>
+
+    <div class="gauge-container">
+      <div class="scale-v" id="scaleI3"></div>
+      <div>
+        <div class="value" id="val_iL3">0 A</div>
+        <div class="gauge-v" id="iL3"></div>
+      </div>
+    </div>
   </div>
 
-  <!-- FRECUENCIA (horizontal) -->
+  <!-- FRECUENCIA -->
   <div class="row">
-    <div class="gauge-h" id="freq"><span>Hz</span></div>
+    <div>
+      <div class="value" id="val_freq">50 Hz</div>
+      <div class="gauge-h" id="freq"></div>
+      <div class="scale-h">
+        <span>45</span>
+        <span>50</span>
+        <span>55</span>
+      </div>
+    </div>
   </div>
 
-  <!-- IMAGEN -->
   <div class="generador-wrapper">
     <img src="img/grupo_electrogeno-removebg-preview.png" class="generador-img">
   </div>
 
 </div>
-
-<script type="module" src="js/main.js"></script>
-</body>
-</html>
