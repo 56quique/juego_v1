@@ -1,112 +1,31 @@
-body {
+/* Reset básico */
+* {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0f172a;
-  color: #e5e7eb;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.header {
-  text-align: center;
-  padding: 15px;
-  background: #020617;
-}
-
-.main {
-  display: grid;
-  gap: 12px;
-  padding: 10px;
-}
-
-/* PANEL */
-.panel {
-  background: #1e293b;
-  border-radius: 12px;
-  padding: 12px;
-}
-
-.panel-title {
-  text-align: center;
-}
-
-/* BLOQUES */
-.block {
-  margin-bottom: 15px;
-}
-
-/* GRID */
-.grid-3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-/* TABLET */
-@media (max-width: 768px) {
-  .grid-3 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* CELULAR */
-@media (max-width: 480px) {
-  .grid-3 {
-    grid-template-columns: 1fr;
-    justify-items: center;
-  }
-
-  .panel {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  h3 {
-    font-size: 14px;
-  }
-}
-
-/* GAUGE */
-.gauge {
+body, html {
+  width: 100%;
+  height: 100%;
+  background-color: #222; /* fondo oscuro tipo SCADA */
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  min-width: 180px;
+  font-family: Arial, sans-serif;
 }
 
-.gauge canvas {
-  width: 100%;
-  max-width: 220px;
+.scada-container {
+  position: relative;
+  width: 80%;
+  max-width: 800px;
+  height: auto;
+}
+
+.generador-img {
   display: block;
-}
-
-/* VALORES */
-.values {
-  display: flex;
-  justify-content: space-around;
   width: 100%;
-}
-
-/* TRANSFERENCIA */
-.transfer {
-  display: flex;
-  gap: 5px;
-}
-
-.state {
-  flex: 1;
-  background: #334155;
-  padding: 10px;
-  text-align: center;
-  border-radius: 6px;
-}
-
-/* HISTORICO */
-.history {
-  background: #1e293b;
-  border-radius: 12px;
-  padding: 10px;
-}
-
-.placeholder.big {
-  height: 150px;
+  height: auto;
+  margin: 0 auto;
+  z-index: 1;
 }
