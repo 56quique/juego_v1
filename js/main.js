@@ -1,3 +1,9 @@
-﻿import { test } from './gauges.js'
+import { crearGauge } from './gauges.js'
 
-test()
+const vRedL1 = crearGauge("vRedL1", 0, 300)
+
+// simulación
+setInterval(() => {
+  const valor = 200 + Math.random() * 40
+  vRedL1.set(valor)
+}, 1000)
