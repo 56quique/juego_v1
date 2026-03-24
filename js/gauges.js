@@ -1,4 +1,4 @@
-export function crearGauge(id, min, max, label = "") {
+export function crearGauge(id, min, max, config = {}) {
   const canvas = document.getElementById(id)
 
   if (!canvas) {
@@ -7,6 +7,10 @@ export function crearGauge(id, min, max, label = "") {
   }
 
   const ctx = canvas.getContext("2d")
+
+  // CONFIGURACIÓN FLEXIBLE
+  const zonas = config.zonas || []
+  const unidad = config.unidad || ""
 
   function resize() {
     const width = canvas.parentElement.offsetWidth || 200
@@ -20,6 +24,9 @@ export function crearGauge(id, min, max, label = "") {
   let valorActual = 0
   let valorObjetivo = 0
 
+  // =========================
+  // ZONAS
+  // =========================
   function dibujarZona(w, h, inicio, fin, color) {
     const angInicio = Math.PI + (inicio - min) / (max - min) * Math.PI
     const angFin = Math.PI + (fin - min) / (max - min) * Math.PI
@@ -27,10 +34,13 @@ export function crearGauge(id, min, max, label = "") {
     ctx.beginPath()
     ctx.arc(w / 2, h, w / 2 - 10, angInicio, angFin)
     ctx.strokeStyle = color
-    ctx.lineWidth = 10
+    ctx.lineWidth = 12
     ctx.stroke()
   }
 
+  // =========================
+  // TICKS
+  // =========================
   function dibujarTicks(w, h) {
     const cx = w / 2
     const cy = h
@@ -67,8 +77,8 @@ export function crearGauge(id, min, max, label = "") {
       ctx.stroke()
 
       if (esMayor) {
-        const xt = cx + Math.cos(ang) * (radio - 25)
-        const yt = cy + Math.sin(ang) * (radio - 25)
+        const xt = cx + Math.cos(ang) * (radio - 28)
+        const yt = cy + Math.sin(ang) * (radio - 28)
 
         ctx.fillStyle = "#fff"
         ctx.font = `${Math.round(w * 0.06)}px Arial`
@@ -78,6 +88,21 @@ export function crearGauge(id, min, max, label = "") {
     }
   }
 
+  // =========================
+  // COLOR DINÁMICO AGUJA
+  // =========================
+  function colorPorValor(valor) {
+    for (let z of zonas) {
+      if (valor >= z.from && valor <= z.to) {
+        return z.color
+      }
+    }
+    return "#ffcc00"
+  }
+
+  // =========================
+  // DIBUJO PRINCIPAL
+  // =========================
   function dibujar(valor) {
     const w = canvas.width
     const h = canvas.height
@@ -86,31 +111,31 @@ export function crearGauge(id, min, max, label = "") {
 
     ctx.clearRect(0, 0, w, h)
 
-    // zonas
-    dibujarZona(w, h, 0, 210, "#d9534f")
-    dibujarZona(w, h, 210, 240, "#5cb85c")
-    dibujarZona(w, h, 240, 300, "#d9534f")
+    // ZONAS DINÁMICAS
+    zonas.forEach(z => {
+      dibujarZona(w, h, z.from, z.to, z.color)
+    })
 
-    // ticks
+    // TICKS
     dibujarTicks(w, h)
 
     const cx = w / 2
     const cy = h
 
-    // texto dinámico
+    // TEXTO
     const fontGrande = Math.round(w * 0.12)
     const fontChica = Math.round(w * 0.08)
 
     ctx.fillStyle = "#fff"
     ctx.font = `bold ${fontGrande}px Arial`
     ctx.textAlign = "center"
-    ctx.fillText(valor.toFixed(0) + " V", cx, h - 10)
+    ctx.fillText(valor.toFixed(0) + " " + unidad, cx, h - 10)
 
     ctx.fillStyle = "#ccc"
     ctx.font = `bold ${fontChica}px Arial`
-    ctx.fillText(label, cx, h - (fontGrande + 10))
+    ctx.fillText(config.label || "", cx, h - (fontGrande + 10))
 
-    // aguja
+    // AGUJA
     const angulo = Math.PI + (valor - min) / (max - min) * Math.PI
     const radio = w / 2 - 20
 
@@ -120,20 +145,23 @@ export function crearGauge(id, min, max, label = "") {
     ctx.beginPath()
     ctx.moveTo(cx, cy)
     ctx.lineTo(x, y)
-    ctx.strokeStyle = "#ffcc00"
+    ctx.strokeStyle = colorPorValor(valor) // 🔥 color dinámico
     ctx.lineWidth = Math.max(2, w * 0.02)
     ctx.lineCap = "round"
     ctx.stroke()
 
-    // centro
+    // CENTRO
     ctx.beginPath()
     ctx.arc(cx, cy, Math.max(4, w * 0.02), 0, Math.PI * 2)
     ctx.fillStyle = "#ccc"
     ctx.fill()
   }
 
+  // =========================
+  // INERCIA
+  // =========================
   function actualizar() {
-    valorActual += (valorObjetivo - valorActual) * 0.1
+    valorActual += (valorObjetivo - valorActual) * 0.08
     dibujar(valorActual)
     requestAnimationFrame(actualizar)
   }
