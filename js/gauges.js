@@ -1,145 +1,73 @@
 // gauge.js
 export function crearGauge(id, min, max, config = {}) {
-  const canvas = document.getElementById(id);
-  if (!canvas) {
-    console.error("Canvas no encontrado:", id);
-    return;
-  }
 
-  const ctx = canvas.getContext("2d");
+  const el = document.getElementById(id);
+  if (!el) return;
 
   const unidad = config.unidad || "";
   const label = config.label || "";
-  const inercia = config.inercia || 0.08;
-  let zonas = config.zonas;
+  const zonas = config.zonas || [];
 
-  if (!zonas || zonas.length === 0) {
-    zonas = [{ from: min, to: max, color: "#00ff00" }];
+  // =========================
+  // CREAR ESTRUCTURA
+  // =========================
+  el.innerHTML = `
+    <div class="gauge-box">
+      <div class="gauge-header">
+        <div class="gauge-label">${label}</div>
+        <div class="gauge-value">0 ${unidad}</div>
+      </div>
+
+      <div class="gauge-body">
+        <div class="scale"></div>
+        <div class="line"></div>
+        <div class="cursor"></div>
+      </div>
+    </div>
+  `;
+
+  const scaleEl = el.querySelector(".scale");
+  const cursor = el.querySelector(".cursor");
+  const valueEl = el.querySelector(".gauge-value");
+
+  // =========================
+  // CREAR ESCALA
+  // =========================
+  const steps = 6;
+
+  for (let i = 0; i <= steps; i++) {
+    const v = min + (i * (max - min) / steps);
+
+    const tick = document.createElement("div");
+    tick.className = "tick";
+
+    const num = document.createElement("span");
+    num.textContent = Math.round(v);
+
+    // color según zona (solo número)
+    let color = "#aaa";
+    zonas.forEach(z => {
+      if (v >= z.from && v <= z.to) color = z.color;
+    });
+
+    num.style.color = color;
+
+    tick.appendChild(num);
+    scaleEl.appendChild(tick);
   }
 
-  let valorActual = 0;
-  let valorObjetivo = 0;
+  // =========================
+  // ACTUALIZAR
+  // =========================
+  function set(valor) {
 
-  function resize() {
-    const width = canvas.parentElement.offsetWidth || 200;
-    canvas.width = width;
-    canvas.height = width / 2;
-    dibujar(valorActual); // fuerza el redraw después del resize
+    const percent = ((valor - min) / (max - min)) * 100;
+    const p = Math.max(0, Math.min(100, percent));
+
+    cursor.style.bottom = p + "%";
+
+    valueEl.textContent = valor.toFixed(1) + " " + unidad;
   }
 
-  window.addEventListener("resize", resize);
-  resize();
-
-  function dibujarZona(w, h, inicio, fin, color) {
-    const angInicio = Math.PI + ((inicio - min) / (max - min)) * Math.PI;
-    const angFin = Math.PI + ((fin - min) / (max - min)) * Math.PI;
-
-    ctx.beginPath();
-    ctx.arc(w / 2, h, w / 2 - 10, angInicio, angFin);
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 12;
-    ctx.stroke();
-  }
-
-  function dibujarTicks(w, h) {
-    const cx = w / 2;
-    const cy = h;
-    const radio = w / 2 - 10;
-    const rango = max - min;
-    const tickMenor = rango <= 100 ? 5 : 10;
-    const tickMayor = rango <= 100 ? 25 : 50;
-
-    for (let v = min; v <= max; v += tickMenor) {
-      const ang = Math.PI + ((v - min) / (max - min)) * Math.PI;
-      const esMayor = v % tickMayor === 0;
-      const largo = esMayor ? 14 : 8;
-      const grosor = esMayor ? 3 : 1.5;
-
-      const x1 = cx + Math.cos(ang) * (radio - largo);
-      const y1 = cy + Math.sin(ang) * (radio - largo);
-      const x2 = cx + Math.cos(ang) * radio;
-      const y2 = cy + Math.sin(ang) * radio;
-
-      ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y2);
-      ctx.strokeStyle = "#aaa";
-      ctx.lineWidth = grosor;
-      ctx.stroke();
-
-      if (esMayor) {
-        const xt = cx + Math.cos(ang) * (radio - 28);
-        const yt = cy + Math.sin(ang) * (radio - 28);
-        ctx.fillStyle = "#fff";
-        ctx.font = `${Math.round(w * 0.06)}px Arial`;
-        ctx.textAlign = "center";
-        ctx.fillText(v, xt, yt);
-      }
-    }
-  }
-
-  function colorPorValor(valor) {
-    for (let z of zonas) {
-      if (valor >= z.from && valor <= z.to) return z.color;
-    }
-    return "#ffcc00";
-  }
-
-  function dibujar(valor) {
-    const w = canvas.width;
-    const h = canvas.height;
-    if (w === 0 || h === 0) return;
-
-    ctx.clearRect(0, 0, w, h);
-
-    zonas.forEach(z => dibujarZona(w, h, z.from, z.to, z.color));
-    dibujarTicks(w, h);
-
-    const cx = w / 2;
-    const cy = h;
-
-    // Texto
-    ctx.fillStyle = "#fff";
-    ctx.font = `bold ${Math.round(w * 0.12)}px Arial`;
-    ctx.textAlign = "center";
-    ctx.fillText(valor.toFixed(0) + " " + unidad, cx, h - 10);
-
-    ctx.fillStyle = "#ccc";
-    ctx.font = `bold ${Math.round(w * 0.08)}px Arial`;
-    ctx.fillText(label, cx, h - Math.round(w * 0.12 + 10));
-
-    // Aguja
-    const angulo = Math.PI + ((valor - min) / (max - min)) * Math.PI;
-    const radio = w / 2 - 20;
-    const x = cx + Math.cos(angulo) * radio;
-    const y = cy + Math.sin(angulo) * radio;
-
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.lineTo(x, y);
-    ctx.strokeStyle = colorPorValor(valor);
-    ctx.lineWidth = Math.max(2, w * 0.02);
-    ctx.lineCap = "round";
-    ctx.stroke();
-
-    // Centro
-    ctx.beginPath();
-    ctx.arc(cx, cy, Math.max(4, w * 0.02), 0, Math.PI * 2);
-    ctx.fillStyle = "#ccc";
-    ctx.fill();
-  }
-
-  function actualizar() {
-    valorActual += (valorObjetivo - valorActual) * inercia;
-    dibujar(valorActual);
-    requestAnimationFrame(actualizar);
-  }
-
-  actualizar();
-
-  return {
-    set(valor) {
-      valorObjetivo = valor;
-    }
-  };
+  return { set };
 }
