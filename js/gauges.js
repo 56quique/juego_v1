@@ -143,8 +143,7 @@ export function crearGauge(id, min, max, label = "") {
     // ticks
     dibujarTicks(w, h)
 
-    const cx = w/2
-    const cy = h
+   ctx.font = `${Math.round(w * 0.06)}px Arial`
 
     // valor principal
     ctx.fillStyle = "#fff"
