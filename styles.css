@@ -21,10 +21,29 @@ body {
 
 /* FILAS */
 .row {
-  display: flex;
-  gap: 50px; /* MÁS SEPARACIÓN */
-  justify-content: center;
-  margin-bottom: 40px;
+  gap: 80px;   /* MÁS ESPACIO */
+}
+
+.gauge-v {
+  width: 22px;     /* un poco más ancho */
+  height: 280px;   /* MÁS ALTO */
+}
+
+.gauge-h {
+  width: 220px;    /* un poco más largo */
+  height: 25px;
+}
+
+.value {
+  font-size: 18px; /* más legible */
+}
+
+.scale-v {
+  font-size: 13px;
+}
+
+.scale-h {
+  font-size: 13px;
 }
 
 /* CONTENEDOR DE CADA GAUGE */
