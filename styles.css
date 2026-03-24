@@ -34,7 +34,29 @@ body {
 .grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 10px;
+}
+@media (max-width: 768px) {
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+.panel {
+  padding: 10px;
+}
+
+.block {
+  margin-bottom: 15px;
+}
+@media (max-width: 480px) {
+  h3 {
+    font-size: 14px;
+  }
 }
 
 .gauge {
