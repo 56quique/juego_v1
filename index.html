@@ -10,27 +10,24 @@
 
 <div class="scada-container">
   <div class="card">
-    
-    <!-- Gauges Tensión -->
-    <div class="gauges-row" id="gauges-tension">
-      <div class="gauge-vertical" id="vL1"></div>
-      <div class="gauge-vertical" id="vL2"></div>
-      <div class="gauge-vertical" id="vL3"></div>
+
+    <!-- Gauges organizados horizontalmente -->
+    <div class="gauges-top">
+      <div class="tension-column">
+        <div class="gauge-vertical" id="vL1"></div>
+        <div class="gauge-vertical" id="vL2"></div>
+        <div class="gauge-vertical" id="vL3"></div>
+      </div>
+
+      <div class="corriente-column">
+        <div class="gauge-vertical" id="iL1"></div>
+        <div class="gauge-vertical" id="iL2"></div>
+        <div class="gauge-vertical" id="iL3"></div>
+        <div class="gauge-vertical" id="freq"></div>
+      </div>
     </div>
 
-    <!-- Gauges Corriente -->
-    <div class="gauges-row" id="gauges-corriente">
-      <div class="gauge-vertical" id="iL1"></div>
-      <div class="gauge-vertical" id="iL2"></div>
-      <div class="gauge-vertical" id="iL3"></div>
-    </div>
-
-    <!-- Gauge Frecuencia -->
-    <div class="gauges-row" id="gauge-frecuencia">
-      <div class="gauge-vertical" id="freq"></div>
-    </div>
-
-    <!-- Imagen del generador -->
+    <!-- Imagen del generador debajo -->
     <div class="generador-wrapper">
       <img src="img/grupo_electrogeno-removebg-preview.png" 
            alt="Grupo Electrógeno" 
