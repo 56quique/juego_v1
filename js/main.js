@@ -1,4 +1,4 @@
-import { crearGauge } from "./gauge.js";
+import { crearGauge } from "/js/gauge.js";
 
 const g1 = crearGauge("vL1", 0, 300);
 const g2 = crearGauge("vL2", 0, 300);
