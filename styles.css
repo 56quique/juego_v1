@@ -10,7 +10,7 @@ body {
   padding: 20px;
 }
 
-/* TARJETA MÁS GRANDE */
+/* TARJETA */
 .card {
   background: #333;
   border-radius: 15px;
@@ -22,40 +22,44 @@ body {
 /* FILAS */
 .row {
   display: flex;
-  gap: 30px;
+  gap: 50px; /* MÁS SEPARACIÓN */
   justify-content: center;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
+}
+
+/* CONTENEDOR DE CADA GAUGE */
+.gauge-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 /* =========================
-   GAUGE VERTICAL (FINO Y MÁS ALTO)
+   GAUGE VERTICAL
 ========================= */
 .gauge-v {
-  width: 25px;      /* MÁS DELGADO */
-  height: 220px;    /* MÁS ALTO */
+  width: 18px;        /* MÁS FINO */
+  height: 240px;      /* MÁS ALTO */
   background: #555;
   border-radius: 6px;
   position: relative;
-  overflow: hidden;
 }
 
 /* =========================
    GAUGE HORIZONTAL
 ========================= */
 .gauge-h {
-  width: 300px;   /* MÁS GRANDE */
-  height: 35px;
+  width: 220px;  /* MÁS ANGOSTO REAL */
+  height: 20px;
   background: #555;
   border-radius: 6px;
   position: relative;
-  overflow: hidden;
 }
 
 /* BARRA */
 .fill {
   position: absolute;
   background: #0f0;
-  transition: all 0.3s;
 }
 
 /* Vertical */
@@ -73,41 +77,45 @@ body {
 }
 
 /* =========================
-   ESCALA VERTICAL
+   ESCALA CON TICKS
 ========================= */
 .scale-v {
-  position: absolute;
-  left: -25px;
-  top: 0;
-  height: 100%;
+  height: 240px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  font-size: 10px;
-  color: #ccc;
 }
 
-/* =========================
-   ESCALA HORIZONTAL
-========================= */
+.tick {
+  display: flex;
+  align-items: center;
+  color: #ccc;
+  font-size: 10px;
+}
+
+.tick-line {
+  width: 8px;
+  height: 1px;
+  background: #ccc;
+  margin-right: 4px;
+}
+
+/* ESCALA HORIZONTAL */
 .scale-h {
-  position: absolute;
-  bottom: -18px;
-  width: 100%;
   display: flex;
   justify-content: space-between;
-  font-size: 10px;
+  width: 220px;
+  margin-top: 5px;
   color: #ccc;
+  font-size: 10px;
 }
 
-/* TEXTO FASE */
-span {
-  position: absolute;
-  bottom: -22px;
-  width: 100%;
+/* VALOR NUMÉRICO */
+.value {
   text-align: center;
-  color: white;
-  font-size: 12px;
+  color: #fff;
+  margin-bottom: 5px;
+  font-size: 14px;
 }
 
 /* IMAGEN */
