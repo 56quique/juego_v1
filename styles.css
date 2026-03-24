@@ -7,88 +7,91 @@
 body {
   background-color: #222;
   font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: flex-start;
   padding: 20px;
 }
 
-/* TARJETA */
+/* =========================
+   TARJETA PRINCIPAL
+========================= */
 .card {
   background: #333;
   border-radius: 15px;
-  padding: 30px;
-  width: fit-content;
+  padding: 35px;
   box-shadow: 0 0 25px rgba(0,0,0,0.7);
 }
 
-/* FILAS */
+/* =========================
+   FILAS
+========================= */
 .row {
-  gap: 80px;   /* MÁS ESPACIO */
+  display: flex;
+  gap: 80px;              /* MÁS separación */
+  margin-bottom: 45px;
+  align-items: flex-end; /* alinea bases */
 }
 
-.gauge-v {
-  width: 22px;     /* un poco más ancho */
-  height: 280px;   /* MÁS ALTO */
-}
-
-.gauge-h {
-  width: 220px;    /* un poco más largo */
-  height: 25px;
-}
-
-.value {
-  font-size: 18px; /* más legible */
-}
-
-.scale-v {
-  font-size: 13px;
-}
-
-.scale-h {
-  font-size: 13px;
-}
-
-/* CONTENEDOR DE CADA GAUGE */
+/* =========================
+   CONTENEDOR DE CADA GAUGE
+========================= */
 .gauge-container {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+/* =========================
+   VALOR NUMÉRICO
+========================= */
+.value {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 /* =========================
    GAUGE VERTICAL
 ========================= */
 .gauge-v {
-  width: 18px;        /* MÁS FINO */
-  height: 240px;      /* MÁS ALTO */
+  width: 22px;        /* fino pero visible */
+  height: 280px;      /* alto */
   background: #555;
   border-radius: 6px;
   position: relative;
+  overflow: hidden;
 }
 
 /* =========================
-   GAUGE HORIZONTAL
+   GAUGE HORIZONTAL (FRECUENCIA)
 ========================= */
 .gauge-h {
-  width: 220px;  /* MÁS ANGOSTO REAL */
-  height: 20px;
+  width: 220px;
+  height: 25px;
   background: #555;
   border-radius: 6px;
   position: relative;
+  overflow: hidden;
 }
 
-/* BARRA */
+/* =========================
+   BARRA INTERNA
+========================= */
 .fill {
   position: absolute;
-  background: #0f0;
+  transition: all 0.3s ease;
 }
 
-/* Vertical */
+/* vertical */
 .gauge-v .fill {
   bottom: 0;
   width: 100%;
   height: 0%;
 }
 
-/* Horizontal */
+/* horizontal */
 .gauge-h .fill {
   left: 0;
   height: 100%;
@@ -96,54 +99,48 @@ body {
 }
 
 /* =========================
-   ESCALA CON TICKS
+   ESCALA VERTICAL
 ========================= */
 .scale-v {
-  height: 240px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
-
-.tick {
-  display: flex;
-  align-items: center;
+  height: 280px;
+  font-size: 13px;
   color: #ccc;
-  font-size: 10px;
 }
 
-.tick-line {
-  width: 8px;
-  height: 1px;
-  background: #ccc;
-  margin-right: 4px;
-}
-
-/* ESCALA HORIZONTAL */
+/* =========================
+   ESCALA HORIZONTAL
+========================= */
 .scale-h {
   display: flex;
   justify-content: space-between;
   width: 220px;
-  margin-top: 5px;
+  margin-top: 6px;
+  font-size: 13px;
   color: #ccc;
-  font-size: 10px;
 }
 
-/* VALOR NUMÉRICO */
-.value {
-  text-align: center;
-  color: #fff;
-  margin-bottom: 5px;
-  font-size: 14px;
+/* =========================
+   BLOQUE FRECUENCIA
+========================= */
+.freq-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* IMAGEN */
+/* =========================
+   IMAGEN GENERADOR
+========================= */
 .generador-wrapper {
   display: flex;
   justify-content: center;
+  margin-top: 10px;
 }
 
 .generador-img {
-  max-width: 450px;
+  max-width: 480px;
   width: 100%;
 }
