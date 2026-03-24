@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>SCADA - Grupo Electrógeno</title>
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <!-- CSS -->
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -14,69 +16,21 @@
 
   <!-- TENSIÓN -->
   <div class="row">
-    <div class="gauge-container">
-      <div class="scale-v" id="scaleV1"></div>
-      <div>
-        <div class="value" id="val_vL1">0 V</div>
-        <div class="gauge-v" id="vL1"></div>
-      </div>
-    </div>
-
-    <div class="gauge-container">
-      <div class="scale-v" id="scaleV2"></div>
-      <div>
-        <div class="value" id="val_vL2">0 V</div>
-        <div class="gauge-v" id="vL2"></div>
-      </div>
-    </div>
-
-    <div class="gauge-container">
-      <div class="scale-v" id="scaleV3"></div>
-      <div>
-        <div class="value" id="val_vL3">0 V</div>
-        <div class="gauge-v" id="vL3"></div>
-      </div>
-    </div>
+    <div id="vL1"></div>
+    <div id="vL2"></div>
+    <div id="vL3"></div>
   </div>
 
   <!-- CORRIENTE -->
   <div class="row">
-    <div class="gauge-container">
-      <div class="scale-v" id="scaleI1"></div>
-      <div>
-        <div class="value" id="val_iL1">0 A</div>
-        <div class="gauge-v" id="iL1"></div>
-      </div>
-    </div>
-
-    <div class="gauge-container">
-      <div class="scale-v" id="scaleI2"></div>
-      <div>
-        <div class="value" id="val_iL2">0 A</div>
-        <div class="gauge-v" id="iL2"></div>
-      </div>
-    </div>
-
-    <div class="gauge-container">
-      <div class="scale-v" id="scaleI3"></div>
-      <div>
-        <div class="value" id="val_iL3">0 A</div>
-        <div class="gauge-v" id="iL3"></div>
-      </div>
-    </div>
+    <div id="iL1"></div>
+    <div id="iL2"></div>
+    <div id="iL3"></div>
   </div>
 
   <!-- FRECUENCIA -->
   <div class="row">
-    <div class="freq-box">
-      <div class="value" id="val_freq">50 Hz</div>
-      <div class="gauge-h" id="freq"></div>
-      <div class="scale-h">
-        <span>45</span>
-        <span>50</span>
-        <span>55</span>
-      </div>
-    </div>
+    <div id="freq"></div>
   </div>
 
   <!-- IMAGEN -->
