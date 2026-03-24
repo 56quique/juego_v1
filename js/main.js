@@ -1,6 +1,6 @@
 import { crearGauge } from './gauges.js'
 
-const vRedL1 = crearGauge("vRedL1", 0, 300)
+const vRedL1 = crearGauge("vRedL1", 0, 300, "L1")
 
 // simulación
 setInterval(() => {
