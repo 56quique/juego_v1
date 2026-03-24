@@ -45,7 +45,7 @@ body {
 
 .gauge canvas {
   width: 100%;
-  height: 120px;
+  aspect-ratio: 2 / 1; /* semicircular */
 }
 
 .gauge span {
