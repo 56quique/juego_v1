@@ -5,83 +5,91 @@
 }
 
 body {
-  background-color: #222;
+  background-color: #1e1e1e;
   font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: flex-start;
   padding: 20px;
 }
 
 /* =========================
-   TARJETA PRINCIPAL
+   TARJETA
 ========================= */
 .card {
-  background: #333;
+  background: #2c2c2c;
   border-radius: 15px;
-  padding: 35px;
-  box-shadow: 0 0 25px rgba(0,0,0,0.7);
+  padding: 40px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.8);
+  max-width: 1000px;
 }
 
 /* =========================
-   FILAS
+   FILAS CON GRID (ESTABLE)
 ========================= */
 .row {
-  display: flex;
-  gap: 80px;              /* MÁS separación */
-  margin-bottom: 45px;
-  align-items: flex-end; /* alinea bases */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 80px;
+  margin-bottom: 50px;
+  justify-items: center;
+}
+
+/* fila frecuencia */
+.row.freq {
+  grid-template-columns: 1fr;
 }
 
 /* =========================
-   CONTENEDOR DE CADA GAUGE
+   GAUGE CONTENEDOR FIJO
 ========================= */
 .gauge-container {
+  width: 90px; /* ancho fijo → evita movimiento */
   display: flex;
   align-items: flex-end;
-  gap: 12px;
+  justify-content: center;
+  gap: 10px;
 }
 
 /* =========================
-   VALOR NUMÉRICO
+   VALORES
 ========================= */
 .value {
   color: #fff;
   text-align: center;
   margin-bottom: 10px;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
+  width: 100%;
 }
 
 /* =========================
    GAUGE VERTICAL
 ========================= */
 .gauge-v {
-  width: 22px;        /* fino pero visible */
-  height: 280px;      /* alto */
-  background: #555;
-  border-radius: 6px;
+  width: 24px;
+  height: 320px;
+  background: #444;
+  border-radius: 8px;
   position: relative;
   overflow: hidden;
 }
 
 /* =========================
-   GAUGE HORIZONTAL (FRECUENCIA)
+   GAUGE HORIZONTAL
 ========================= */
 .gauge-h {
-  width: 220px;
-  height: 25px;
-  background: #555;
-  border-radius: 6px;
+  width: 300px;
+  height: 28px;
+  background: #444;
+  border-radius: 8px;
   position: relative;
   overflow: hidden;
 }
 
 /* =========================
-   BARRA INTERNA
+   BARRA (SIN REFLUJO)
 ========================= */
 .fill {
   position: absolute;
-  transition: all 0.3s ease;
+  transition: height 0.25s linear, width 0.25s linear;
 }
 
 /* vertical */
@@ -102,12 +110,14 @@ body {
    ESCALA VERTICAL
 ========================= */
 .scale-v {
+  height: 320px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 280px;
-  font-size: 13px;
-  color: #ccc;
+  font-size: 14px;
+  color: #bbb;
+  min-width: 40px;
+  text-align: right;
 }
 
 /* =========================
@@ -116,14 +126,14 @@ body {
 .scale-h {
   display: flex;
   justify-content: space-between;
-  width: 220px;
+  width: 300px;
+  font-size: 14px;
+  color: #bbb;
   margin-top: 6px;
-  font-size: 13px;
-  color: #ccc;
 }
 
 /* =========================
-   BLOQUE FRECUENCIA
+   FRECUENCIA
 ========================= */
 .freq-box {
   display: flex;
@@ -132,15 +142,79 @@ body {
 }
 
 /* =========================
-   IMAGEN GENERADOR
+   IMAGEN
 ========================= */
 .generador-wrapper {
   display: flex;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .generador-img {
-  max-width: 480px;
+  max-width: 550px;
   width: 100%;
+}
+
+/* =========================
+   📱 RESPONSIVE
+========================= */
+@media (max-width: 900px) {
+
+  .card {
+    padding: 25px;
+  }
+
+  .row {
+    gap: 40px;
+  }
+
+  .gauge-v {
+    height: 260px;
+  }
+
+  .scale-v {
+    height: 260px;
+    font-size: 12px;
+  }
+
+  .gauge-h {
+    width: 220px;
+  }
+
+  .scale-h {
+    width: 220px;
+    font-size: 12px;
+  }
+
+  .value {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .row {
+    grid-template-columns: 1fr; /* uno abajo del otro */
+    gap: 30px;
+  }
+
+  .gauge-container {
+    width: auto;
+  }
+
+  .gauge-v {
+    height: 220px;
+  }
+
+  .scale-v {
+    height: 220px;
+  }
+
+  .gauge-h {
+    width: 180px;
+  }
+
+  .scale-h {
+    width: 180px;
+  }
 }
