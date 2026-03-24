@@ -10,29 +10,29 @@ body {
   padding: 20px;
 }
 
-/* TARJETA */
+/* TARJETA MÁS GRANDE */
 .card {
   background: #333;
   border-radius: 15px;
-  padding: 25px;
+  padding: 30px;
   width: fit-content;
-  box-shadow: 0 0 20px rgba(0,0,0,0.6);
+  box-shadow: 0 0 25px rgba(0,0,0,0.7);
 }
 
 /* FILAS */
 .row {
   display: flex;
-  gap: 20px;
+  gap: 30px;
   justify-content: center;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
 }
 
 /* =========================
-   GAUGE VERTICAL
+   GAUGE VERTICAL (FINO Y MÁS ALTO)
 ========================= */
 .gauge-v {
-  width: 40px;
-  height: 180px;
+  width: 25px;      /* MÁS DELGADO */
+  height: 220px;    /* MÁS ALTO */
   background: #555;
   border-radius: 6px;
   position: relative;
@@ -43,15 +43,15 @@ body {
    GAUGE HORIZONTAL
 ========================= */
 .gauge-h {
-  width: 200px;
-  height: 30px;
+  width: 300px;   /* MÁS GRANDE */
+  height: 35px;
   background: #555;
   border-radius: 6px;
   position: relative;
   overflow: hidden;
 }
 
-/* BARRA INTERNA */
+/* BARRA */
 .fill {
   position: absolute;
   background: #0f0;
@@ -72,10 +72,38 @@ body {
   width: 0%;
 }
 
-/* TEXTO */
+/* =========================
+   ESCALA VERTICAL
+========================= */
+.scale-v {
+  position: absolute;
+  left: -25px;
+  top: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #ccc;
+}
+
+/* =========================
+   ESCALA HORIZONTAL
+========================= */
+.scale-h {
+  position: absolute;
+  bottom: -18px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #ccc;
+}
+
+/* TEXTO FASE */
 span {
   position: absolute;
-  bottom: -20px;
+  bottom: -22px;
   width: 100%;
   text-align: center;
   color: white;
@@ -89,6 +117,6 @@ span {
 }
 
 .generador-img {
-  max-width: 400px;
+  max-width: 450px;
   width: 100%;
 }
