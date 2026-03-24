@@ -2,6 +2,16 @@ export function crearGauge(id, min, max) {
   const canvas = document.getElementById(id)
   const ctx = canvas.getContext("2d")
 
+  function resize() {
+    const width = canvas.parentElement.offsetWidth
+
+    canvas.width = width
+    canvas.height = width / 2 // semicircular perfecto
+  }
+
+  resize()
+  window.addEventListener("resize", resize)
+
   let valorActual = 0
   let valorObjetivo = 0
 
@@ -11,7 +21,7 @@ export function crearGauge(id, min, max) {
 
     ctx.clearRect(0, 0, w, h)
 
-    // fondo
+    // arco base
     ctx.beginPath()
     ctx.arc(w/2, h, w/2 - 10, Math.PI, 0)
     ctx.strokeStyle = "#333"
@@ -32,7 +42,6 @@ export function crearGauge(id, min, max) {
   }
 
   function actualizar() {
-    // inercia (suavizado)
     valorActual += (valorObjetivo - valorActual) * 0.1
     dibujar(valorActual)
     requestAnimationFrame(actualizar)
