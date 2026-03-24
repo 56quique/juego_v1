@@ -222,3 +222,15 @@ body {
     width: 180px;
   }
 }
+.fill.verde {
+  background: lime;
+}
+
+.fill.amarillo {
+  background: yellow;
+}
+
+.fill.rojo {
+  background: red;
+}
+
