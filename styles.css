@@ -24,7 +24,7 @@ body, html {
 
 .generador-img {
   display: block;
-  width: 100%;
+  width: 60%;
   height: auto;
   margin: 0 auto;
   z-index: 1;
