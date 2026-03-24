@@ -8,13 +8,14 @@
 body, html {
   width: 100%;
   height: 100%;
-  background-color: #222; /* fondo oscuro tipo SCADA */
+  background-color: #222; /* Fondo oscuro estilo SCADA */
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: Arial, sans-serif;
 }
 
+/* Contenedor general centrado */
 .scada-container {
   position: relative;
   width: 80%;
@@ -22,21 +23,30 @@ body, html {
   height: auto;
 }
 
+/* Tarjeta que envuelve la imagen */
 .card {
   position: relative;
-  background-color: #333;             /* color de fondo de la tarjeta */
-  border-radius: 15px;                /* bordes redondeados */
-  padding: 20px;                      /* espacio alrededor de la imagen */
-  box-shadow: 0 0 20px rgba(0,0,0,0.6); /* sombra estilo SCADA */
+  background-color: #333;               /* Fondo de la tarjeta */
+  border-radius: 15px;                  /* Bordes redondeados */
+  padding: 20px;                        /* Espacio alrededor de la imagen */
+  box-shadow: 0 0 20px rgba(0,0,0,0.6); /* Sombra estilo SCADA */
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 600px;                   /* ancho máximo de la tarjeta */
-  margin: 0 auto;                     /* centrar la tarjeta */
+  max-width: 600px;                     /* Ancho máximo de la tarjeta */
+  margin: 0 auto;                       /* Centrar horizontalmente */
 }
 
+/* Imagen del generador dentro de la tarjeta */
 .generador-img {
   display: block;
-  width: 80%;                         /* tamaño de la imagen dentro de la tarjeta */
-  height: auto;                        /* mantener proporción */
+  width: 80%;       /* Ajusta este valor para achicar o agrandar la imagen */
+  height: auto;     /* Mantener proporción */
+}
+
+/* Efecto hover opcional */
+.card:hover {
+  box-shadow: 0 0 30px rgba(0,255,0,0.7);
+  transform: scale(1.02);
+  transition: all 0.3s ease;
 }
