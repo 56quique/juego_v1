@@ -22,10 +22,21 @@ body, html {
   height: auto;
 }
 
+.card {
+  position: relative;
+  background-color: #333;             /* color de fondo de la tarjeta */
+  border-radius: 15px;                /* bordes redondeados */
+  padding: 20px;                      /* espacio alrededor de la imagen */
+  box-shadow: 0 0 20px rgba(0,0,0,0.6); /* sombra estilo SCADA */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 600px;                   /* ancho máximo de la tarjeta */
+  margin: 0 auto;                     /* centrar la tarjeta */
+}
+
 .generador-img {
   display: block;
-  width: 60%;
-  height: auto;
-  margin: 0 auto;
-  z-index: 1;
+  width: 80%;                         /* tamaño de la imagen dentro de la tarjeta */
+  height: auto;                        /* mantener proporción */
 }
