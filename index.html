@@ -1,3 +1,15 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>SCADA - Grupo Electrógeno</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
 <div class="card">
 
   <!-- TENSIÓN -->
@@ -56,7 +68,7 @@
 
   <!-- FRECUENCIA -->
   <div class="row">
-    <div>
+    <div class="freq-box">
       <div class="value" id="val_freq">50 Hz</div>
       <div class="gauge-h" id="freq"></div>
       <div class="scale-h">
@@ -67,8 +79,15 @@
     </div>
   </div>
 
+  <!-- IMAGEN -->
   <div class="generador-wrapper">
     <img src="img/grupo_electrogeno-removebg-preview.png" class="generador-img">
   </div>
 
 </div>
+
+<!-- JS -->
+<script type="module" src="js/main.js"></script>
+
+</body>
+</html>
