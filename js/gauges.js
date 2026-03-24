@@ -1,4 +1,4 @@
-export function crearGauge(id, min, max) {
+export function crearGauge(id, min, max, label = "") {
   const canvas = document.getElementById(id)
 
   if (!canvas) {
@@ -80,17 +80,22 @@ export function crearGauge(id, min, max) {
     // ticks
     dibujarTicks(w, h)
 
-    // valor
+    const cx = w/2
+    const cy = h
+
+    // valor principal
     ctx.fillStyle = "#fff"
-    ctx.font = "16px Arial"
+    ctx.font = "bold 16px Arial"
     ctx.textAlign = "center"
-    ctx.fillText(valor.toFixed(0) + " V", w/2, h - 10)
+    ctx.fillText(valor.toFixed(0) + " V", cx, h - 15)
+
+    // etiqueta (L1, L2, etc)
+    ctx.fillStyle = "#ccc"
+    ctx.font = "bold 14px Arial"
+    ctx.fillText(label, cx, h - 35)
 
     // aguja
     const angulo = Math.PI + (valor - min) / (max - min) * Math.PI
-
-    const cx = w/2
-    const cy = h
     const radio = w/2 - 20
 
     const x = cx + Math.cos(angulo) * radio
