@@ -33,7 +33,11 @@ class Gauge {
   }
 
   draw() {
-    this.value += (this.target - this.value) * 0.08;
+    // inercia
+this.value += (this.target - this.value) * 0.08;
+
+// intervalo
+}, 200);
 
     const ctx = this.ctx;
     const w = this.canvas.clientWidth;
