@@ -23,6 +23,10 @@ export function crearGauge(id, min, max) {
     dibujarZona(0, 210, "#d9534f")   // rojo suave
 dibujarZona(210, 240, "#5cb85c") // verde industrial
 dibujarZona(240, 300, "#d9534f")
+    ctx.fillStyle = "#fff"
+ctx.font = "16px Arial"
+ctx.textAlign = "center"
+ctx.fillText(valor.toFixed(0) + " V", w/2, h - 10)
 
     // arco base
     function dibujarZona(inicio, fin, color) {
