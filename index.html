@@ -1,29 +1,25 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SCADA - Grupo Electrógeno</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-
 <div class="scada-container">
   <div class="card">
 
-    <!-- Gauges organizados horizontalmente -->
-    <div class="gauges-top">
-      <div class="tension-column">
+    <!-- Contenedor horizontal -->
+    <div class="gauges-container">
+      <!-- Columna Tensión -->
+      <div class="column">
         <div class="gauge-vertical" id="vL1"></div>
         <div class="gauge-vertical" id="vL2"></div>
         <div class="gauge-vertical" id="vL3"></div>
       </div>
 
-      <div class="corriente-column">
-        <div class="gauge-vertical" id="iL1"></div>
-        <div class="gauge-vertical" id="iL2"></div>
-        <div class="gauge-vertical" id="iL3"></div>
-        <div class="gauge-vertical" id="freq"></div>
+      <!-- Columna Corriente + Frecuencia -->
+      <div class="column">
+        <div class="corriente-row">
+          <div class="gauge-vertical" id="iL1"></div>
+          <div class="gauge-vertical" id="iL2"></div>
+          <div class="gauge-vertical" id="iL3"></div>
+        </div>
+        <div class="frecuencia-row">
+          <div class="gauge-vertical" id="freq"></div>
+        </div>
       </div>
     </div>
 
@@ -36,7 +32,3 @@
 
   </div>
 </div>
-
-<script type="module" src="js/main.js"></script>
-</body>
-</html>
