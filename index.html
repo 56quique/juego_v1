@@ -3,98 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SCADA Transferencia</title>
+  <title>SCADA - Grupo Electrógeno</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div class="scada-container">
+    <img src="img/grupo_electrogeno-removebg-preview.png" alt="Grupo Electrógeno" class="generador-img" id="generador">
+    <!-- Aquí después podemos agregar gauges u otros indicadores -->
+  </div>
 
-<header class="header">
-  <h1>SCADA - Transferencia Automática</h1>
-</header>
-
-<main class="main">
-
-  <!-- RED -->
-  <section class="panel">
-    <h2 class="panel-title">RED</h2>
-
-    <!-- TENSION -->
-    <div class="block">
-      <h3>Tensión (V)</h3>
-      <div class="grid-3">
-      <div class="gauge"><canvas 
-      id="vRedL1"></canvas></div> 
-      <div class="gauge"><canvas 
-       id="vRedL2"></canvas></div> 
-       <div class="gauge"><canvas 
-       id="vRedL3"></canvas></div> 
-      </div>
-    </div>
-
-    <!-- CORRIENTE -->
-    <div class="block">
-      <h3>Corriente (A)</h3>
-      <div class="grid-3">
-       <div class="gauge"><canvas 
-      id="iRedL1"></canvas></div> 
-        <div class="gauge"><canvas 
-       id="iRedL2"></canvas></div> 
-        <div class="gauge"><canvas 
-      id="iRedL3"></canvas></div> 
-      </div>
-    </div>
-
-    <div class="values">
-      <div>Potencia: <span>-- kW</span></div>
-      <div>FP: <span>--</span></div>
-    </div>
-  </section>
-
-  <!-- GENERADOR -->
-  <section class="panel">
-    <h2 class="panel-title">GENERADOR</h2>
-
-    <!-- TENSION -->
-    <div class="block">
-      <h3>Tensión (V)</h3>
-      <div class="grid-3">
-        <div class="gauge"><canvas id="vGenL1"></canvas></div>
-        <div class="gauge"><canvas id="vGenL2"></canvas></div>
-        <div class="gauge"><canvas id="vGenL3"></canvas></div>
-      </div>
-    </div>
-
-    <!-- CORRIENTE -->
-    <div class="block">
-      <h3>Corriente (A)</h3>
-      <div class="grid-3">
-        <div class="gauge"><canvas id="iGenL1"></canvas></div>
-        <div class="gauge"><canvas id="iGenL2"></canvas></div>
-        <div class="gauge"><canvas id="iGenL3"></canvas></div>
-      </div>
-    </div>
-
-    <div class="values">
-      <div>Potencia: <span>-- kW</span></div>
-      <div>FP: <span>--</span></div>
-    </div>
-  </section>
-
-  <!-- ESTADO -->
-  <section class="transfer">
-    <div class="state">RED</div>
-    <div class="state">FALLA</div>
-    <div class="state">ARRANQUE</div>
-    <div class="state">GRUPO</div>
-  </section>
-
-  <!-- HISTORICO -->
-  <section class="history">
-    <div class="placeholder big">Gráfico histórico</div>
-  </section>
-
-</main>
-
-<script type="module" src="js/main.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
