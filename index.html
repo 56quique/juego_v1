@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedidos · Pizzas &amp; Cerveza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   CONFIGURACIÓN RÁPIDA — lo único que necesitás tocar seguido
+   ============================================================ */
+</style>
+</head>
+<body>
+
+<!-- ======================================================================
+     ZONA DE CONFIGURACIÓN — EDITÁ ACÁ TUS PRODUCTOS Y TU NÚMERO
+     ====================================================================== -->
+<script>
+  // Tu número de WhatsApp con código de país, SIN espacios, SIN +, SIN guiones.
+  // Argentina: 549 + código de área (sin el 0) + número (sin el 15)
+  // Ejemplo Jardín América/Posadas: "5493751123456"
+  const WHATSAPP_NUMBER = "5493743553489";
+
+  const NOMBRE_NEGOCIO = "Pizzas & Cerveza";
+
+  // Cada producto: nombre, precio, características (array de textos cortos),
+  // y foto (ruta a una imagen, ej: "images/muzzarella.jpg" si la subís a tu repo,
+  // o una URL completa si la alojás en otro lado).
+  const PRODUCTOS = [
+    {
+      id: "p1",
+      nombre: "Pizza Muzzarella",
+      precio: 6000,
+      foto: "Images/Prelista.png",
+      caracteristicas: ["Masa casera", "Muzzarella abundante", "Lista para hornear"]
+    },
+    {
+      id: "p2",
+      nombre: "Combo Noche",
+      precio: 18000,
+      foto: "Images/Combo Noche.jpeg",
+      caracteristicas: ["1 Masa casera", "1 Pack Latas"]
+    },
+    {
+      id: "c1",
+      nombre: "Combo Futbol",
+      precio: 30000,
+      foto: "Images/Combo Futbol.png",
+      caracteristicas: ["1 Pizza Muzzarella", "12 latas Quilmes o Brahama 473cc", "Ahorrás pidiendo el combo"]
+    },
+    {
+      id: "c2",
+      nombre: "Combo La Juntada",
+      precio: 35000,
+      foto: "Images/Combo La Juntada.png",
+      caracteristicas: ["2 Pizza Muzzarella", "12 latas Quilmes o Brahma 473cc", "Ahorrás pidiendo el combo"]
+    },
+     {
+      id: "c3",
+      nombre: "Pack Latas",
+      precio: 12000,
+      foto: "Images/Pack Latas.png",
+      caracteristicas: ["6 latas Quilmes o Brahma 473cc", "Precio por unidad 2000"]
+    },
+  ];
+</script>
+<!-- ======================================================================
+     FIN DE LA ZONA DE CONFIGURACIÓN — de acá para abajo no hace falta tocar
+     ====================================================================== -->
+
+<style>
+  :root{
+    --bg: #fbf6ee;
+    --panel: #ffffff;
+    --ink: #241a14;
+    --muted: #8a7b6c;
+    --line: #ece2d3;
+    --tomato: #c1442d;
+    --tomato-dark: #9c3521;
+    --gold: #d99a3d;
+    --green: #3f8a5a;
+    --radius: 14px;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family:'Inter', system-ui, sans-serif;
+    padding-bottom: 90px;
+  }
+  h1,h2,h3{ font-family:'Fraunces', serif; margin:0; }
+
+  header.top{
+    padding: 22px 18px 18px;
+    text-align:center;
+    background: linear-gradient(180deg, #fff, var(--bg));
+    border-bottom: 1px solid var(--line);
+  }
+  header.top h1{ font-size: 26px; color: var(--tomato-dark); }
+  header.top p{ margin:6px 0 0; color: var(--muted); font-size: 13.5px; }
+
+  main{ max-width: 720px; margin: 0 auto; padding: 18px 14px; }
+
+  .grid{
+    display:grid; grid-template-columns: 1fr 1fr; gap:14px;
+  }
+  @media (max-width: 480px){ .grid{ grid-template-columns: 1fr; } }
+
+  .card{
+    background: var(--panel); border:1px solid var(--line);
+    border-radius: var(--radius); overflow:hidden;
+    display:flex; flex-direction:column;
+    box-shadow: 0 1px 3px rgba(36,26,20,0.05);
+  }
+  .card img{
+    width:100%; aspect-ratio: 4/3; object-fit: cover;
+    background: var(--line);
+  }
+  .card .body{ padding: 12px 14px 14px; display:flex; flex-direction:column; gap:8px; flex:1; }
+  .card h3{ font-size: 16.5px; color: var(--ink); line-height:1.25; }
+  .card .precio{ font-size: 17px; font-weight:700; color: var(--tomato-dark); }
+  .card ul{ margin:0; padding-left:18px; font-size:12.5px; color: var(--muted); }
+  .card ul li{ margin-bottom:2px; }
+
+  .qty-row{
+    display:flex; align-items:center; gap:8px; margin-top:auto; padding-top:6px;
+  }
+  .qty-btn{
+    width:30px; height:30px; border-radius:8px; border:1px solid var(--line);
+    background: var(--bg); font-size:16px; cursor:pointer; color: var(--ink);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .qty-val{ min-width:20px; text-align:center; font-weight:600; }
+  .btn-add{
+    flex:1; background: var(--tomato); color:#fff; border:none;
+    padding:9px 10px; border-radius:8px; font-weight:600; font-size:13.5px;
+    cursor:pointer;
+  }
+  .btn-add:active{ background: var(--tomato-dark); }
+
+  .card img{ cursor:pointer; }
+  .card .body{ pointer-events:none; } /* toda la selección pasa por la imagen */
+
+  .selector-body{ display:flex; flex-direction:column; align-items:center; text-align:center; }
+  .selector-foto{
+    width:100%; max-width:280px; aspect-ratio:4/3; object-fit:cover;
+    border-radius: var(--radius); background: var(--line); margin-bottom:12px;
+  }
+  .selector-nombre{ font-size:19px; margin-bottom:4px; }
+  .selector-precio{ font-size:17px; font-weight:700; color: var(--tomato-dark); margin-bottom:8px; }
+  .selector-caract{ margin:0 0 14px; padding-left:18px; font-size:13px; color:var(--muted); text-align:left; }
+  .selector-caract li{ margin-bottom:2px; }
+  .selector-qty-row{ margin-bottom:16px; }
+  .selector-btn-confirmar{ width:100%; flex:none; padding:12px; font-size:14.5px; }
+
+  /* Barra flotante del carrito */
+  .cart-bar{
+    position:fixed; bottom:14px; left:14px; right:14px; max-width:692px; margin:0 auto;
+    background: var(--ink); color:#fff; border-radius: 14px;
+    padding: 13px 16px; display:flex; align-items:center; justify-content:space-between;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    cursor:pointer; z-index: 30;
+    transition: transform .15s ease;
+  }
+  .cart-bar.hidden{ display:none; }
+  .cart-bar .info{ font-size:14px; }
+  .cart-bar .info b{ color: var(--gold); }
+  .cart-bar .ver{ font-size:13px; font-weight:600; color:#fff; opacity:.9; }
+
+  /* Modal carrito */
+  .overlay{
+    position:fixed; inset:0; background: rgba(20,14,10,0.45);
+    display:none; align-items:flex-end; justify-content:center; z-index:40;
+  }
+  .overlay.show{ display:flex; }
+  .sheet{
+    background: var(--panel); width:100%; max-width:720px;
+    border-radius: 18px 18px 0 0; padding: 18px 18px 22px;
+    max-height: 82vh; overflow-y:auto;
+  }
+  .sheet-head{
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;
+  }
+  .sheet-head h2{ font-size:20px; }
+  .close-x{
+    background:none; border:none; font-size:22px; color:var(--muted); cursor:pointer; line-height:1;
+  }
+  .cart-item{
+    display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line);
+  }
+  .cart-item img{ width:52px; height:52px; border-radius:8px; object-fit:cover; background:var(--line); flex:none; }
+  .cart-item .ci-info{ flex:1; }
+  .cart-item .ci-info .nom{ font-size:14px; font-weight:600; }
+  .cart-item .ci-info .precio-u{ font-size:12px; color:var(--muted); }
+  .cart-item .ci-qty{ display:flex; align-items:center; gap:6px; }
+  .cart-item .ci-subtotal{ font-size:14px; font-weight:700; min-width:70px; text-align:right; }
+  .remove-link{ background:none; border:none; color:var(--tomato); font-size:12px; cursor:pointer; padding:0; margin-left:8px; }
+
+  .totales{ margin-top: 14px; padding-top:12px; border-top:1px dashed var(--line); }
+  .totales .fila{ display:flex; justify-content:space-between; font-size:15px; margin-bottom:4px; }
+  .totales .fila.total{ font-size:19px; font-weight:700; color: var(--tomato-dark); }
+
+  .aviso-pago{
+    background: #f4ede0; border:1px solid var(--line); border-radius:10px;
+    padding:10px 12px; font-size:12.5px; color: var(--muted); margin-top:14px;
+    display:flex; gap:8px; align-items:flex-start;
+  }
+
+  .btn-whatsapp{
+    width:100%; background: var(--green); color:#fff; border:none;
+    padding:14px; border-radius:12px; font-weight:700; font-size:15.5px;
+    margin-top:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .btn-whatsapp:disabled{ background:#b9c9be; cursor:not-allowed; }
+
+  .empty-cart{ text-align:center; color:var(--muted); padding: 30px 10px; font-size:14px; }
+
+  .datos-cliente{ margin-top:14px; }
+  .datos-cliente label{ font-size:12.5px; color:var(--muted); display:block; margin-bottom:5px; }
+  .datos-cliente input{
+    width:100%; padding:10px 11px; border:1px solid var(--line); border-radius:8px;
+    font-size:14.5px; font-family:'Inter',sans-serif; margin-bottom:10px;
+  }
+
+  footer.hint{
+    text-align:center; color: var(--muted); font-size:12px; margin-top: 20px; line-height:1.6;
+  }
+</style>
+
+<header class="top">
+  <h1 id="nombre-negocio"></h1>
+  <p>Pedís acá, retirás y pagás en el local. Sin pagos online.</p>
+</header>
+
+<main>
+  <div class="grid" id="grid-productos"></div>
+</main>
+
+<footer class="hint">
+  Elegí tus productos, revisá el carrito y enviá el pedido por WhatsApp.<br>
+  El pago es al retirar.
+</footer>
+
+<!-- Barra flotante -->
+<div class="cart-bar hidden" id="cart-bar">
+  <div class="info"><b id="cart-bar-count">0</b> productos · <span id="cart-bar-total">$0</span></div>
+  <div class="ver">Ver carrito ›</div>
+</div>
+
+<!-- Modal selección de cantidad (se abre al hacer click en la foto de un producto) -->
+<div class="overlay" id="overlay-selector">
+  <div class="sheet">
+    <div class="sheet-head">
+      <h2>Elegí la cantidad</h2>
+      <button class="close-x" id="btn-cerrar-selector">&times;</button>
+    </div>
+    <div class="selector-body">
+      <img id="sel-foto" src="" alt="" class="selector-foto">
+      <h3 id="sel-nombre" class="selector-nombre"></h3>
+      <div id="sel-precio" class="selector-precio"></div>
+      <ul id="sel-caract" class="selector-caract"></ul>
+      <div class="qty-row selector-qty-row">
+        <button class="qty-btn" id="sel-dec">−</button>
+        <span class="qty-val" id="sel-qty">1</span>
+        <button class="qty-btn" id="sel-inc">+</button>
+      </div>
+      <button class="btn-add selector-btn-confirmar" id="sel-confirmar">Agregar al carrito</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal / sheet carrito -->
+<div class="overlay" id="overlay">
+  <div class="sheet">
+    <div class="sheet-head">
+      <h2>Tu pedido</h2>
+      <button class="close-x" id="btn-cerrar-carrito">&times;</button>
+    </div>
+
+    <div id="cart-items"></div>
+
+    <div class="totales" id="totales-wrap" style="display:none;">
+      <div class="fila total"><span>Total</span><span id="cart-total">$0</span></div>
+    </div>
+
+    <div class="datos-cliente" id="datos-cliente" style="display:none;">
+      <label for="cliente-nombre">Tu nombre (para el pedido)</label>
+      <input type="text" id="cliente-nombre" placeholder="Ej: Juan Pérez">
+      <label for="cliente-nota">Aclaración (opcional)</label>
+      <input type="text" id="cliente-nota" placeholder="Ej: sin cebolla, retiro a las 21hs">
+    </div>
+
+    <div class="aviso-pago" id="aviso-pago" style="display:none;">
+      💵 El pago es al retirar el pedido. Este botón solo envía el detalle por WhatsApp, no se cobra nada acá.
+    </div>
+
+    <button class="btn-whatsapp" id="btn-whatsapp" disabled>
+      Enviar pedido por WhatsApp
+    </button>
+  </div>
+</div>
+
+<script>
+  document.getElementById('nombre-negocio').textContent = NOMBRE_NEGOCIO;
+
+  // ---------- Estado del carrito (solo en esta sesión del navegador) ----------
+  let carrito = {}; // { productoId: cantidad }
+
+  function money(n){
+    return '$' + Number(n).toLocaleString('es-AR', {minimumFractionDigits:0, maximumFractionDigits:0});
+  }
+
+  function getProducto(id){
+    return PRODUCTOS.find(p => p.id === id);
+  }
+
+  // ---------- Render catálogo ----------
+  function renderCatalogo(){
+    const grid = document.getElementById('grid-productos');
+    grid.innerHTML = PRODUCTOS.map(p => {
+      return `
+        <div class="card">
+          <img src="${p.foto}" alt="${escapeHtml(p.nombre)}" data-select="${p.id}" onerror="this.style.opacity=0.15">
+          <div class="body">
+            <h3>${escapeHtml(p.nombre)}</h3>
+            <div class="precio">${money(p.precio)}</div>
+            <ul>${p.caracteristicas.map(c => `<li>${escapeHtml(c)}</li>`).join('')}</ul>
+          </div>
+        </div>`;
+    }).join('');
+
+    grid.querySelectorAll('[data-select]').forEach(img=>{
+      img.addEventListener('click', ()=> abrirSelector(img.dataset.select));
+    });
+  }
+
+  // ---------- Selector de cantidad (al hacer click en la foto de un producto) ----------
+  let selectorProductoId = null;
+  let selectorCantidad = 1;
+
+  function abrirSelector(id){
+    const p = getProducto(id);
+    if(!p) return;
+    selectorProductoId = id;
+    selectorCantidad = 1;
+
+    document.getElementById('sel-foto').src = p.foto;
+    document.getElementById('sel-foto').alt = p.nombre;
+    document.getElementById('sel-nombre').textContent = p.nombre;
+    document.getElementById('sel-precio').textContent = money(p.precio);
+    document.getElementById('sel-caract').innerHTML =
+      (p.caracteristicas||[]).map(c => `<li>${escapeHtml(c)}</li>`).join('');
+    document.getElementById('sel-qty').textContent = selectorCantidad;
+
+    document.getElementById('overlay-selector').classList.add('show');
+  }
+
+  function cerrarSelector(){
+    document.getElementById('overlay-selector').classList.remove('show');
+  }
+
+  document.getElementById('btn-cerrar-selector').addEventListener('click', cerrarSelector);
+  document.getElementById('overlay-selector').addEventListener('click', (e)=>{
+    if(e.target.id === 'overlay-selector') cerrarSelector();
+  });
+
+  document.getElementById('sel-inc').addEventListener('click', ()=>{
+    selectorCantidad++;
+    document.getElementById('sel-qty').textContent = selectorCantidad;
+  });
+  document.getElementById('sel-dec').addEventListener('click', ()=>{
+    selectorCantidad = Math.max(1, selectorCantidad - 1);
+    document.getElementById('sel-qty').textContent = selectorCantidad;
+  });
+
+  document.getElementById('sel-confirmar').addEventListener('click', ()=>{
+    if(!selectorProductoId) return;
+    carrito[selectorProductoId] = (carrito[selectorProductoId] || 0) + selectorCantidad;
+    actualizarBarraCarrito();
+    cerrarSelector();
+  });
+
+  // ---------- Barra flotante ----------
+  function actualizarBarraCarrito(){
+    const ids = Object.keys(carrito).filter(id => carrito[id] > 0);
+    const totalItems = ids.reduce((a,id)=> a + carrito[id], 0);
+    const totalMonto = ids.reduce((a,id)=> a + carrito[id]*getProducto(id).precio, 0);
+
+    const bar = document.getElementById('cart-bar');
+    if(totalItems === 0){
+      bar.classList.add('hidden');
+    } else {
+      bar.classList.remove('hidden');
+      document.getElementById('cart-bar-count').textContent = totalItems;
+      document.getElementById('cart-bar-total').textContent = money(totalMonto);
+    }
+  }
+
+  document.getElementById('cart-bar').addEventListener('click', abrirCarrito);
+  document.getElementById('btn-cerrar-carrito').addEventListener('click', cerrarCarrito);
+  document.getElementById('overlay').addEventListener('click', (e)=>{
+    if(e.target.id === 'overlay') cerrarCarrito();
+  });
+
+  function abrirCarrito(){
+    renderCarritoModal();
+    document.getElementById('overlay').classList.add('show');
+  }
+  function cerrarCarrito(){
+    document.getElementById('overlay').classList.remove('show');
+  }
+
+  function renderCarritoModal(){
+    const ids = Object.keys(carrito).filter(id => carrito[id] > 0);
+    const wrap = document.getElementById('cart-items');
+    const totalesWrap = document.getElementById('totales-wrap');
+    const datosCliente = document.getElementById('datos-cliente');
+    const avisoPago = document.getElementById('aviso-pago');
+    const btnWpp = document.getElementById('btn-whatsapp');
+
+    if(ids.length === 0){
+      wrap.innerHTML = '<div class="empty-cart">Todavía no agregaste productos.</div>';
+      totalesWrap.style.display = 'none';
+      datosCliente.style.display = 'none';
+      avisoPago.style.display = 'none';
+      btnWpp.disabled = true;
+      return;
+    }
+
+    wrap.innerHTML = ids.map(id=>{
+      const p = getProducto(id);
+      const cant = carrito[id];
+      const subtotal = p.precio * cant;
+      return `
+        <div class="cart-item">
+          <img src="${p.foto}" alt="" onerror="this.style.opacity=0.15">
+          <div class="ci-info">
+            <div class="nom">${escapeHtml(p.nombre)}</div>
+            <div class="precio-u">${money(p.precio)} c/u</div>
+          </div>
+          <div class="ci-qty">
+            <button class="qty-btn" data-modal-dec="${id}">−</button>
+            <span class="qty-val">${cant}</span>
+            <button class="qty-btn" data-modal-inc="${id}">+</button>
+          </div>
+          <div class="ci-subtotal">${money(subtotal)}</div>
+          <button class="remove-link" data-remove="${id}">Quitar</button>
+        </div>`;
+    }).join('');
+
+    const total = ids.reduce((a,id)=> a + carrito[id]*getProducto(id).precio, 0);
+    document.getElementById('cart-total').textContent = money(total);
+    totalesWrap.style.display = 'block';
+    datosCliente.style.display = 'block';
+    avisoPago.style.display = 'flex';
+    btnWpp.disabled = false;
+
+    wrap.querySelectorAll('[data-modal-inc]').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        carrito[b.dataset.modalInc]++;
+        renderCarritoModal(); actualizarBarraCarrito(); sincronizarQtyCatalogo();
+      });
+    });
+    wrap.querySelectorAll('[data-modal-dec]').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        const id = b.dataset.modalDec;
+        carrito[id] = Math.max(0, carrito[id]-1);
+        if(carrito[id] === 0) delete carrito[id];
+        renderCarritoModal(); actualizarBarraCarrito(); sincronizarQtyCatalogo();
+      });
+    });
+    wrap.querySelectorAll('[data-remove]').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        delete carrito[b.dataset.remove];
+        renderCarritoModal(); actualizarBarraCarrito(); sincronizarQtyCatalogo();
+      });
+    });
+  }
+
+  function sincronizarQtyCatalogo(){
+    PRODUCTOS.forEach(p=>{
+      const span = document.getElementById('qty-' + p.id);
+      if(span) span.textContent = carrito[p.id] || 0;
+    });
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  // ---------- Enviar por WhatsApp ----------
+  document.getElementById('btn-whatsapp').addEventListener('click', ()=>{
+    const ids = Object.keys(carrito).filter(id => carrito[id] > 0);
+    if(ids.length === 0) return;
+
+    if(!WHATSAPP_NUMBER || WHATSAPP_NUMBER === "PON_TU_NUMERO_ACA"){
+      alert('Falta configurar el número de WhatsApp en el archivo (WHATSAPP_NUMBER).');
+      return;
+    }
+
+    const nombre = document.getElementById('cliente-nombre').value.trim();
+    const nota = document.getElementById('cliente-nota').value.trim();
+
+    let lineas = ['Hola! Quiero hacer este pedido:', ''];
+    let total = 0;
+    ids.forEach(id=>{
+      const p = getProducto(id);
+      const cant = carrito[id];
+      const subtotal = p.precio * cant;
+      total += subtotal;
+      lineas.push(`• ${cant}x ${p.nombre} - ${money(subtotal)}`);
+    });
+    lineas.push('', `Total: ${money(total)}`, '(Pago al retirar)');
+    if(nombre) lineas.push('', `Nombre: ${nombre}`);
+    if(nota) lineas.push(`Aclaración: ${nota}`);
+
+    const texto = lineas.join('\n');
+    const finalUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(texto)}`;
+
+    window.open(finalUrl, '_blank');
+
+    // Reseteamos el carrito porque el pedido ya se envió
+    carrito = {};
+    document.getElementById('cliente-nombre').value = '';
+    document.getElementById('cliente-nota').value = '';
+    sincronizarQtyCatalogo();
+    actualizarBarraCarrito();
+    renderCarritoModal();
+    cerrarCarrito();
+  });
+
+  // ---------- Inicio ----------
+  renderCatalogo();
+  actualizarBarraCarrito();
+</script>
+
+</body>
+</html>
